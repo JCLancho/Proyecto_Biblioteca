@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 
 public class RedimensionadorImagenes {
 
+	//metodo redim
 	public static ImageIcon redim (String fichImag, int ancho, int alto){
 	            ImageIcon imIcon=new ImageIcon(fichImag);
 
