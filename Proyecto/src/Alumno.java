@@ -41,6 +41,11 @@ public class Alumno {
 		this.apellido2 = apellido2;
 	}
 	
+	public String getNombreCompleto() {
+		return this.nombre + " " + this.apellido1 + " " + this.apellido2;
+	}
+	
+	
 	@Override
 	public String toString() {
 		StringBuffer result = new StringBuffer();
