@@ -177,6 +177,7 @@ public class AlumnoView extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
+		table.setFillsViewportHeight(true);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
