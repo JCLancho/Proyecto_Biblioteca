@@ -1,10 +1,12 @@
+package com.redim;
+
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class RedimensionadorImagenes {
+public class RedimImage {
 
-	//metodo redim
+	
 	public static ImageIcon redim (String fichImag, int ancho, int alto){
 	            ImageIcon imIcon=new ImageIcon(fichImag);
 
@@ -17,3 +19,4 @@ public class RedimensionadorImagenes {
 	}
 	
 }
+

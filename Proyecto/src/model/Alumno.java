@@ -1,3 +1,7 @@
+package model;
+
+import javax.swing.ImageIcon;
+
 public class Alumno {
 
 	private String dni;
@@ -8,7 +12,7 @@ public class Alumno {
 	public Alumno() {
 		
 	}
-
+	
 	public String getDni() {
 		return dni;
 	}
