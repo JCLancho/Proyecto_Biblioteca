@@ -14,11 +14,19 @@ import javax.swing.JTextField;
 import java.awt.Insets;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import java.util.List;
+
+import Controller.AlumnoController;
+import model.Alumno;
+
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 import javax.swing.BoxLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AlumnoView extends JFrame {
 
@@ -35,6 +43,7 @@ public class AlumnoView extends JFrame {
 	private JButton btnEditar;
 	private JButton btnBorrar;
 	private JPanel panel_3;
+	private AlumnoController alumnoController;
 
 	/**
 	 * Launch the application.
@@ -55,6 +64,7 @@ public class AlumnoView extends JFrame {
 	 * Create the frame.
 	 */
 	public AlumnoView() {
+		alumnoController = new AlumnoController();
 		setResizable(false);
 		setTitle("Gestionar Alumno");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -163,6 +173,7 @@ public class AlumnoView extends JFrame {
 		panel_2.add(panel_3);
 		
 		btnAnadir = new JButton("Añadir");
+
 		panel_3.add(btnAnadir);
 		btnAnadir.setHorizontalTextPosition(SwingConstants.LEADING);
 		btnAnadir.setHorizontalAlignment(SwingConstants.LEFT);
@@ -177,14 +188,28 @@ public class AlumnoView extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
+		table.setRequestFocusEnabled(false);
+		table.setFocusable(false);
 		table.setFillsViewportHeight(true);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
+		DefaultTableModel modelo = new DefaultTableModel();
+		modelo.setColumnIdentifiers(new String[] {
 				"DNI", "Nombre", "Apellido 1", "Apellido 2"
-			}
-		));
+			});
+		table.setModel(modelo);
 		scrollPane.setViewportView(table);
+		
+		
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				List<Alumno> lista = alumnoController.findAll();
+				for(Alumno a : lista) {
+					modelo.addRow(new Object[] {
+							a.getDni(),a.getNombre(),a.getApellido1(),a.getApellido2()
+					});
+				}
+			}
+		});
+		
 	}
 }

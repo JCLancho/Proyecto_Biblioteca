@@ -1,12 +1,11 @@
-package dao;
+package service;
 
 import java.util.List;
 
-import javax.swing.tree.RowMapper;
-
+import dao.AlumnoDao;
 import model.Alumno;
 
-public interface AlumnoDao {
+public interface AlumnoService {
 
 	public Alumno find(String dni);
 	
@@ -16,8 +15,7 @@ public interface AlumnoDao {
 	
 	public void update();
 	
-	public void delete();
-	
+	public void delete(); 
 	
 	
 	
