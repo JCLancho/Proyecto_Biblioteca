@@ -19,8 +19,8 @@ public class AlumnoController {
 		
 	};
 	
-	public List<Alumno> findAll() {
-		return alumnoDao.findAll();
+	public List<Alumno> findAll(String[] params) {
+		return alumnoDao.findAll(params);
 	}
 	
 	public void add() {
@@ -29,7 +29,8 @@ public class AlumnoController {
 	public void update() {
 	}
 	
-	public void delete() {
+	public void delete(String dni) {
+		alumnoDao.delete(dni);
 	}
 	
 	

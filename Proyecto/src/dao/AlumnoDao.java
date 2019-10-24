@@ -10,15 +10,13 @@ public interface AlumnoDao {
 
 	public Alumno find(String dni);
 	
-	public List<Alumno> findAll();
+	public List<Alumno> findAll(String[] params);
 	
 	public void add();
 	
 	public void update();
 	
-	public void delete();
-	
-	
-	
+	public void delete(String dni);
+		
 	
 }

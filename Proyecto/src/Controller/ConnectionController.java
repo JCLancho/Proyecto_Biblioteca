@@ -4,14 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.sql.PreparedStatement;
+
 
 public class ConnectionController {
 
 	private Connection con;
-	private Statement st;
+	private PreparedStatement ps;
 	private ResultSet resultado;
 	
 	public ConnectionController() {
@@ -19,7 +19,6 @@ public class ConnectionController {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			con=DriverManager.getConnection("jdbc:mysql://localhost/PROYECTO","dm2", "dm2");
-		    st = con.createStatement();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -31,13 +30,17 @@ public class ConnectionController {
 	
 	public Object find() {
 		
-		cerrar();
+		
 		return null;
 	}
 	
-	public ResultSet findAll(String query){
+	public ResultSet findAll(String query, String[] params){
 		try {
-			resultado = st.executeQuery(query);
+			ps = con.prepareStatement(query);
+			for(int i = 0; i < params.length; i++) {
+				ps.setString(i+1, params[i]);
+			}
+			resultado = ps.executeQuery();
 			return resultado;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -46,18 +49,37 @@ public class ConnectionController {
 	}
 	
 	public void add() {
+		
 	}
 	
 	public void update() {
 	}
 	
-	public void delete() {
+	public void delete(String query, String dni) {
+		try {
+			ps = con.prepareStatement(query);
+			ps.setString(1, dni);
+			ps.executeUpdate();
+			ps.close();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void cerrarAll() {
+		try {
+			this.resultado.close();
+			this.ps.close();
+			this.con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	private void cerrar() {
+	public void cerrar() {
 		try {
-			st.close();
-			con.close();
+			this.ps.close();
+			this.con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

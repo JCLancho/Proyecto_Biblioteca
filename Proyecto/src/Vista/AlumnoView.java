@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
@@ -26,7 +29,11 @@ import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ListSelectionModel;
 
 public class AlumnoView extends JFrame {
 
@@ -43,6 +50,7 @@ public class AlumnoView extends JFrame {
 	private JButton btnEditar;
 	private JButton btnBorrar;
 	private JPanel panel_3;
+	private DefaultTableModel modelo;
 	private AlumnoController alumnoController;
 
 	/**
@@ -179,37 +187,97 @@ public class AlumnoView extends JFrame {
 		btnAnadir.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		btnEditar = new JButton("Editar");
+		btnEditar.setEnabled(false);
 		panel_3.add(btnEditar);
 		
 		btnBorrar = new JButton("Borrar");
+		btnBorrar.setEnabled(false);
 		panel_3.add(btnBorrar);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
-		table.setRequestFocusEnabled(false);
-		table.setFocusable(false);
-		table.setFillsViewportHeight(true);
-		DefaultTableModel modelo = new DefaultTableModel();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		modelo = new DefaultTableModel() {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
 		modelo.setColumnIdentifiers(new String[] {
 				"DNI", "Nombre", "Apellido 1", "Apellido 2"
 			});
+
 		table.setModel(modelo);
 		scrollPane.setViewportView(table);
 		
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				List<Alumno> lista = alumnoController.findAll();
-				for(Alumno a : lista) {
-					modelo.addRow(new Object[] {
-							a.getDni(),a.getNombre(),a.getApellido1(),a.getApellido2()
-					});
-				}
+				filtrar();
 			}
 		});
 		
+//		table.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent arg0) {
+//				
+//				if(arg0.getClickCount() == 2) {
+//					int r = table.getSelectedRow();
+//					System.out.println(modelo.getValueAt(r, 0));
+//					System.out.println(modelo.getValueAt(r, 1));
+//					System.out.println(modelo.getValueAt(r, 2));
+//					System.out.println(modelo.getValueAt(r, 3));
+//				}
+//				
+//			}
+//		});
+		
+		ListSelectionModel listSelectionModel = table.getSelectionModel();
+		listSelectionModel.addListSelectionListener(new ListSelectionListener() {
+
+		    public void valueChanged(ListSelectionEvent e) {
+		    	
+		    	if(listSelectionModel.isSelectionEmpty()) {
+		    		btnEditar.setEnabled(false);
+					btnBorrar.setEnabled(false);
+		        } else {
+		        	btnEditar.setEnabled(true);
+					btnBorrar.setEnabled(true);		            
+		        }
+		    }
+		});
+		
+		btnBorrar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				String dni = modelo.getValueAt(table.getSelectedRow(), 0).toString();
+				System.out.println(dni);
+				alumnoController.delete(dni);
+				filtrar();
+				
+			}
+		});
+		
+		
+		
+	
+		
+		
+		
+	}
+	
+	private void filtrar() {
+		modelo.setRowCount(0);
+		String[] params = {inputDni.getText(), inputNombre.getText(), inputApellido1.getText(), inputApellido2.getText()};
+		List<Alumno> lista = alumnoController.findAll(params);
+		for(Alumno a : lista) {
+			modelo.addRow(new Object[] {
+					a.getDni(),a.getNombre(),a.getApellido1(),a.getApellido2()
+			});
+		}
 	}
 }
