@@ -55,6 +55,7 @@ public class AlumnoView extends JFrame {
 	private JPanel panel_3;
 	private DefaultTableModel modelo;
 	private AlumnoController alumnoController;
+	private static AlumnoView frame;
 
 	/**
 	 * Launch the application.
@@ -63,7 +64,7 @@ public class AlumnoView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AlumnoView frame = new AlumnoView();
+					frame = new AlumnoView();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -240,6 +241,7 @@ public class AlumnoView extends JFrame {
 //			}
 //		});
 		
+		
 		ListSelectionModel listSelectionModel = table.getSelectionModel();
 		listSelectionModel.addListSelectionListener(new ListSelectionListener() {
 
@@ -278,7 +280,7 @@ public class AlumnoView extends JFrame {
 				String apellido1 = modelo.getValueAt(r, 2).toString();
 				String apellido2 = modelo.getValueAt(r, 3).toString();
 					
-				new AlumnoDetalle("Editar Alumno", dni, nombre, apellido1, apellido2);
+				new AlumnoDetalle(frame ,"Editar Alumno", dni, nombre, apellido1, apellido2);
 			}
 		});
 		
@@ -287,7 +289,7 @@ public class AlumnoView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				new AlumnoDetalle("Añadir Alumno");
+				new AlumnoDetalle(frame, "Añadir Alumno");
 			}
 		});
 		
@@ -301,7 +303,7 @@ public class AlumnoView extends JFrame {
 		List<Alumno> lista = alumnoController.findAll(params);
 		for(Alumno alumno : lista) {
 			modelo.addRow(new Object[] {
-					alumno.getDni(),alumno.getNombre(),alumno.getApellido1(),alumno.getApellido2()
+					alumno.getDni(), alumno.getNombre(), alumno.getApellido1(), alumno.getApellido2()
 			});
 		}
 	}

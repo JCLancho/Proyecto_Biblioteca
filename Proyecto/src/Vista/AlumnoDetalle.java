@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
@@ -39,10 +40,8 @@ public class AlumnoDetalle extends JDialog {
 	private AlumnoController alumnoController;
 
 	
-	/**
-	 * @wbp.parser.constructor
-	 */
-	public AlumnoDetalle(String titulo) {
+	
+	public AlumnoDetalle(JFrame frame, String titulo) {
 		alumnoController = new AlumnoController();
 		dibujar();
 		eventos();
@@ -50,12 +49,12 @@ public class AlumnoDetalle extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(450, 300);
 		setModal(true);
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(frame);
 		setVisible(true);		
 		
 	}
 	
-	public AlumnoDetalle(String titulo, String dni, String nombre, String apellido1, String apellido2) {
+	public AlumnoDetalle(JFrame frame, String titulo, String dni, String nombre, String apellido1, String apellido2) {
 		alumnoController = new AlumnoController();
 		dibujar();
 		eventos();
@@ -64,10 +63,9 @@ public class AlumnoDetalle extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(450, 300);
 		setModal(true);
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(frame);
 		setVisible(true);
-		
-		
+				
 	}
 	
 	private void dibujar() {
@@ -192,8 +190,20 @@ public class AlumnoDetalle extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
-				
+				String dni = inputDni.getText();
+				String nombre = inputNombre.getText();
+				String apellido1 = inputApellido1.getText();
+				String apellido2 = inputApellido2.getText();
+				if(inputDni.isEditable()) {//añadiendo
+					if(dni.equals("")) {
+						JOptionPane.showMessageDialog(getContentPane(), "El DNI no puede estar vacio");
+					}else {
+						alumnoController.add(new String[] {dni, nombre, apellido1, apellido2});
+					}
+				}else {
+					
+					alumnoController.update(new String[] {nombre, apellido1, apellido2}, dni);
+				}
 				
 			}
 		});

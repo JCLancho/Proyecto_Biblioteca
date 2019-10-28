@@ -20,7 +20,7 @@ public class AlumnoDaoImp implements AlumnoDao{
 	@Override
 	public Alumno find(String dni) {
 		cc = new ConnectionController();
-		ResultSet rs = cc.find(AlumnoDaoSql.FIND, dni);
+		ResultSet rs = cc.find(AlumnoDaoSql.FIND, new String[] {dni});
 		if(rs != null) {
 			try {
 				Alumno alumno = new Alumno();
@@ -66,20 +66,24 @@ public class AlumnoDaoImp implements AlumnoDao{
 	}
 
 	@Override
-	public void add() {
-		
+	public void add(String[] valores) {
+		cc = new ConnectionController();
+		cc.add(AlumnoDaoSql.INSERT_INTO, valores);
+		cc.cerrar();
 	}
 
 	@Override
-	public void update() {
-		// TODO Auto-generated method stub
+	public void update(String[] valores, String dni) {
+		cc = new ConnectionController();
+		cc.update(AlumnoDaoSql.UPDATE_SET, valores, new String[] {dni});
+		cc.cerrar(); 
 		
 	}
 
 	@Override
 	public void delete(String dni) {
 		cc = new ConnectionController();
-		cc.delete(AlumnoDaoSql.DELETE_WHERE, dni);
+		cc.delete(AlumnoDaoSql.DELETE_WHERE, new String[] {dni});
 		cc.cerrar();
 	}
 	

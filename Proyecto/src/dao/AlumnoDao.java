@@ -12,9 +12,9 @@ public interface AlumnoDao {
 	
 	List<Alumno> findAll(String[] params);
 	
-	void add();
+	void add(String[] valores);
 	
-	void update();
+	void update(String[] valores, String dni);
 	
 	void delete(String dni);
 		

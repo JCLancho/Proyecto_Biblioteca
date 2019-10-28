@@ -23,10 +23,12 @@ public class AlumnoController {
 		return alumnoDao.findAll(params);
 	}
 	
-	public void add() {
+	public void add(String[] valores) {
+		alumnoDao.add(valores);
 	}
 	
-	public void update() {
+	public void update(String[] valores, String dni) {
+		alumnoDao.update(valores, dni);
 	}
 	
 	public void delete(String dni) {
