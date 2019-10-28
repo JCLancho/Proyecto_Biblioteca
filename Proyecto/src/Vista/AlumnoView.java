@@ -297,7 +297,7 @@ public class AlumnoView extends JFrame {
 		
 	}
 	
-	private void filtrar() {
+	public void filtrar() {
 		modelo.setRowCount(0);
 		String[] params = {inputDni.getText(), inputNombre.getText(), inputApellido1.getText(), inputApellido2.getText()};
 		List<Alumno> lista = alumnoController.findAll(params);
