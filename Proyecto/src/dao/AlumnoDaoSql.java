@@ -14,7 +14,7 @@ public abstract class AlumnoDaoSql {
 	
 	public static String FROM = " FROM " + AlumnoDaoSql.TABLA;
 	public static String WHERE_ALL = " WHERE 1 = 1";
-	public static String WHERE_DNI = " WHERE DNI = ?";
+	public static String WHERE_DNI = " WHERE DNI = UPPER(?)";
 	
 	public static String FIND = AlumnoDaoSql.SELECT + AlumnoDaoSql.FROM + AlumnoDaoSql.WHERE_DNI;
 	public static String FIND_ALL = AlumnoDaoSql.SELECT + AlumnoDaoSql.FROM + AlumnoDaoSql.WHERE_ALL;

@@ -8,15 +8,15 @@ import model.Alumno;
 
 public interface AlumnoDao {
 
-	public Alumno find(String dni);
+	Alumno find(String dni);
 	
-	public List<Alumno> findAll(String[] params);
+	List<Alumno> findAll(String[] params);
 	
-	public void add();
+	void add();
 	
-	public void update();
+	void update();
 	
-	public void delete(String dni);
+	void delete(String dni);
 		
 	
 }

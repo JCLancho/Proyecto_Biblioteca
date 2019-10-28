@@ -14,6 +14,8 @@ import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+
 import java.awt.Insets;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -34,6 +36,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
+import java.awt.Dimension;
 
 public class AlumnoView extends JFrame {
 
@@ -181,16 +184,19 @@ public class AlumnoView extends JFrame {
 		panel_2.add(panel_3);
 		
 		btnAnadir = new JButton("Añadir");
+		btnAnadir.setPreferredSize(new Dimension(80, 25));
 
 		panel_3.add(btnAnadir);
 		btnAnadir.setHorizontalTextPosition(SwingConstants.LEADING);
 		btnAnadir.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		btnEditar = new JButton("Editar");
+		btnEditar.setPreferredSize(new Dimension(80, 25));
 		btnEditar.setEnabled(false);
 		panel_3.add(btnEditar);
 		
 		btnBorrar = new JButton("Borrar");
+		btnBorrar.setPreferredSize(new Dimension(80, 25));
 		btnBorrar.setEnabled(false);
 		panel_3.add(btnBorrar);
 		
@@ -255,18 +261,37 @@ public class AlumnoView extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				String dni = modelo.getValueAt(table.getSelectedRow(), 0).toString();
-				System.out.println(dni);
 				alumnoController.delete(dni);
 				filtrar();
 				
 			}
 		});
 		
+		btnEditar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				int r = table.getSelectedRow();
+				String dni = modelo.getValueAt(r, 0).toString();
+				String nombre = modelo.getValueAt(r, 1).toString();
+				String apellido1 = modelo.getValueAt(r, 2).toString();
+				String apellido2 = modelo.getValueAt(r, 3).toString();
+					
+				new AlumnoDetalle("Editar Alumno", dni, nombre, apellido1, apellido2);
+			}
+		});
 		
+		btnAnadir.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				new AlumnoDetalle("Añadir Alumno");
+			}
+		});
 		
 	
-		
-		
 		
 	}
 	
@@ -274,9 +299,9 @@ public class AlumnoView extends JFrame {
 		modelo.setRowCount(0);
 		String[] params = {inputDni.getText(), inputNombre.getText(), inputApellido1.getText(), inputApellido2.getText()};
 		List<Alumno> lista = alumnoController.findAll(params);
-		for(Alumno a : lista) {
+		for(Alumno alumno : lista) {
 			modelo.addRow(new Object[] {
-					a.getDni(),a.getNombre(),a.getApellido1(),a.getApellido2()
+					alumno.getDni(),alumno.getNombre(),alumno.getApellido1(),alumno.getApellido2()
 			});
 		}
 	}

@@ -19,8 +19,24 @@ public class AlumnoDaoImp implements AlumnoDao{
 
 	@Override
 	public Alumno find(String dni) {
-		// TODO Auto-generated method stub
-		return null;
+		cc = new ConnectionController();
+		ResultSet rs = cc.find(AlumnoDaoSql.FIND, dni);
+		Alumno alumno = new Alumno();
+		if(rs != null) {
+			try {
+				if(rs.next()) {
+					alumno.setDni(rs.getString("DNI"));
+					alumno.setNombre(rs.getString("NOMBRE"));
+					alumno.setApellido1(rs.getString("APELLIDO1"));
+					alumno.setApellido2(rs.getString("APELLIDO2"));
+				}
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		cc.cerrar();
+		return alumno;
 	}
 
 	@Override
@@ -32,12 +48,12 @@ public class AlumnoDaoImp implements AlumnoDao{
 		if(rs != null) {
 			try {
 				while(rs.next()) {
-					Alumno a = new Alumno();
-					a.setDni(rs.getString("DNI"));
-					a.setNombre(rs.getString("NOMBRE"));
-					a.setApellido1(rs.getString("APELLIDO1"));
-					a.setApellido2(rs.getString("APELLIDO2"));
-					lista.add(a);
+					Alumno alumno = new Alumno();
+					alumno.setDni(rs.getString("DNI"));
+					alumno.setNombre(rs.getString("NOMBRE"));
+					alumno.setApellido1(rs.getString("APELLIDO1"));
+					alumno.setApellido2(rs.getString("APELLIDO2"));
+					lista.add(alumno);
 				}
 				rs.close();
 			} catch (SQLException e) {

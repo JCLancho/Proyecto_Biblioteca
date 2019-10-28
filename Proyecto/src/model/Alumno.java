@@ -56,7 +56,7 @@ public class Alumno {
 		result.append(" [Nombre: ").append(this.getNombre()).append("]");
 		result.append(" [Apellido 1: ").append(this.getApellido1()).append("]");
 		result.append(" [Apellido 2: ").append(this.getApellido2()).append("]");
-		result.append("}");
+		result.append(" }");
 		return result.toString();
 	}
 	

@@ -15,7 +15,7 @@ public class AlumnoController {
 	}
 	
 	public Alumno find(String dni) {
-		return null;
+		return alumnoDao.find(dni);
 		
 	};
 	

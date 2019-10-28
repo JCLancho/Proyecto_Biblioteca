@@ -12,7 +12,6 @@ public class ConnectionController {
 
 	private Connection con;
 	private PreparedStatement ps;
-	private ResultSet resultado;
 	
 	public ConnectionController() {
 		
@@ -28,9 +27,14 @@ public class ConnectionController {
 		
 	}
 	
-	public Object find() {
-		
-		
+	public ResultSet find(String query, String dni) {
+		try {
+			ps = con.prepareStatement(query);
+			ps.setString(1, dni);
+			return ps.executeQuery();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
@@ -40,8 +44,7 @@ public class ConnectionController {
 			for(int i = 0; i < params.length; i++) {
 				ps.setString(i+1, params[i]);
 			}
-			resultado = ps.executeQuery();
-			return resultado;
+			return ps.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -62,16 +65,6 @@ public class ConnectionController {
 			ps.executeUpdate();
 			ps.close();
 		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void cerrarAll() {
-		try {
-			this.resultado.close();
-			this.ps.close();
-			this.con.close();
-		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
