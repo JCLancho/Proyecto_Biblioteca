@@ -39,6 +39,9 @@ public class AlumnoDetalle extends JDialog {
 	private AlumnoController alumnoController;
 
 	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public AlumnoDetalle(String titulo) {
 		alumnoController = new AlumnoController();
 		dibujar();
@@ -189,7 +192,9 @@ public class AlumnoDetalle extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				alumnoController.add();
+				
+				
+				
 			}
 		});
 	}
@@ -198,6 +203,7 @@ public class AlumnoDetalle extends JDialog {
 	private void rellenarCampos(String dni, String nombre, String apellido1, String apellido2) {
 		inputDni.setText(dni);
 		inputDni.setEditable(false);
+		inputDni.setFocusable(false);
 		inputNombre.setText(nombre);
 		inputApellido1.setText(apellido1);
 		inputApellido2.setText(apellido2);

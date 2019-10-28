@@ -21,9 +21,9 @@ public class AlumnoDaoImp implements AlumnoDao{
 	public Alumno find(String dni) {
 		cc = new ConnectionController();
 		ResultSet rs = cc.find(AlumnoDaoSql.FIND, dni);
-		Alumno alumno = new Alumno();
 		if(rs != null) {
 			try {
+				Alumno alumno = new Alumno();
 				if(rs.next()) {
 					alumno.setDni(rs.getString("DNI"));
 					alumno.setNombre(rs.getString("NOMBRE"));
@@ -31,12 +31,13 @@ public class AlumnoDaoImp implements AlumnoDao{
 					alumno.setApellido2(rs.getString("APELLIDO2"));
 				}
 				rs.close();
+				return alumno;
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		cc.cerrar();
-		return alumno;
+		return null;
 	}
 
 	@Override
