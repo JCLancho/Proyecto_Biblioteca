@@ -226,20 +226,16 @@ public class AlumnoView extends JFrame {
 			}
 		});
 		
-//		table.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent arg0) {
-//				
-//				if(arg0.getClickCount() == 2) {
-//					int r = table.getSelectedRow();
-//					System.out.println(modelo.getValueAt(r, 0));
-//					System.out.println(modelo.getValueAt(r, 1));
-//					System.out.println(modelo.getValueAt(r, 2));
-//					System.out.println(modelo.getValueAt(r, 3));
-//				}
-//				
-//			}
-//		});
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+				if(arg0.getClickCount() == 2) {
+					editar();
+				}
+				
+			}
+		});
 		
 		
 		ListSelectionModel listSelectionModel = table.getSelectionModel();
@@ -274,13 +270,7 @@ public class AlumnoView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				int r = table.getSelectedRow();
-				String dni = modelo.getValueAt(r, 0).toString();
-				String nombre = modelo.getValueAt(r, 1).toString();
-				String apellido1 = modelo.getValueAt(r, 2).toString();
-				String apellido2 = modelo.getValueAt(r, 3).toString();
-					
-				new AlumnoDetalle(frame ,"Editar Alumno", dni, nombre, apellido1, apellido2);
+				editar();
 			}
 		});
 		
@@ -297,7 +287,7 @@ public class AlumnoView extends JFrame {
 		
 	}
 	
-	public void filtrar() {
+	private void filtrar() {
 		modelo.setRowCount(0);
 		String[] params = {inputDni.getText(), inputNombre.getText(), inputApellido1.getText(), inputApellido2.getText()};
 		List<Alumno> lista = alumnoController.findAll(params);
@@ -306,5 +296,15 @@ public class AlumnoView extends JFrame {
 					alumno.getDni(), alumno.getNombre(), alumno.getApellido1(), alumno.getApellido2()
 			});
 		}
+	}
+
+	private void editar() {
+		int r = table.getSelectedRow();
+		String dni = modelo.getValueAt(r, 0).toString();
+		String nombre = modelo.getValueAt(r, 1).toString();
+		String apellido1 = modelo.getValueAt(r, 2).toString();
+		String apellido2 = modelo.getValueAt(r, 3).toString();
+			
+		new AlumnoDetalle(frame ,"Editar Alumno", dni, nombre, apellido1, apellido2);
 	}
 }
