@@ -61,7 +61,7 @@ public class pruebas extends JFrame {
 	private DefaultTableModel modelo;
 	private AlumnoController alumnoController;
 	private static pruebas frame;
-	private JPanel panelNorte;
+	private FeedBack panelFeedBack;
 
 	/**
 	 * Launch the application.
@@ -99,8 +99,8 @@ public class pruebas extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		panelNorte = new JPanel();
-		panel_1.add(panelNorte, BorderLayout.NORTH);
+		panelFeedBack = new FeedBack();
+		panel_1.add(panelFeedBack, BorderLayout.NORTH);
 		
 		JPanel panel = new JPanel();
 		panel_1.add(panel);
@@ -258,7 +258,7 @@ public class pruebas extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				new FeedBack(panelNorte, FeedBackConstants.CORRECTO).execute();
+				panelFeedBack.showFeedBack(FeedBackConstants.CORRECTO);
 
 				
 			}
@@ -269,7 +269,7 @@ public class pruebas extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				new FeedBack(panelNorte, FeedBackConstants.ERROR).execute();				
+//				new FeedBack(panelNorte, FeedBackConstants.ERROR).execute();				
 			}
 		});
 		
