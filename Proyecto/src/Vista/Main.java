@@ -4,14 +4,24 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
+
+import javax.swing.ButtonGroup;
 import java.awt.GridLayout;
-import javax.swing.JLabel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
 
 public class Main extends JFrame {
 
 	private JPanel contentPane;
+	private AlumnoView alumno;
+	private LibroView libro;
+	private PrestamoView prestamo;
 
 	/**
 	 * Launch the application.
@@ -37,47 +47,95 @@ public class Main extends JFrame {
 		setResizable(false);
 		setTitle("Biblioteca");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setSize(800, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new GridLayout(0, 1, 0, 0));
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel = new JPanel();
-		contentPane.add(panel);
+		JPanel panelNorte = new JPanel();
+		FlowLayout fl_panelNorte = (FlowLayout) panelNorte.getLayout();
+		fl_panelNorte.setAlignment(FlowLayout.LEFT);
+		contentPane.add(panelNorte, BorderLayout.NORTH);
 		
-		JButton btnGestionarAlumno = new JButton("Gestionar Alumno");
-		panel.add(btnGestionarAlumno);
+		JPanel panelBotones = new JPanel();
+		FlowLayout fl_panelBotones = (FlowLayout) panelBotones.getLayout();
+		fl_panelBotones.setAlignment(FlowLayout.LEFT);
+		panelNorte.add(panelBotones);
 		
-		JPanel panel_1 = new JPanel();
-		contentPane.add(panel_1);
+		JToggleButton btnAlumno = new JToggleButton("Gestionar Alumnos");
+		panelBotones.add(btnAlumno);
 		
-		JButton btnGestionarLibro = new JButton("Gestionar Libro");
-		panel_1.add(btnGestionarLibro);
+		JToggleButton btnLibro = new JToggleButton("Gestionar Libros");
+		panelBotones.add(btnLibro);
 		
-		JPanel panel_2 = new JPanel();
-		contentPane.add(panel_2);
+		JToggleButton btnPrestamos = new JToggleButton("Gestionar Prestamos");
+		panelBotones.add(btnPrestamos);
 		
-		JButton btnGestionarPrestamo = new JButton("Gestionar Prestamo");
-		panel_2.add(btnGestionarPrestamo);
+		ButtonGroup grupo = new ButtonGroup();
+		grupo.add(btnAlumno);
+		grupo.add(btnLibro);
+		grupo.add(btnPrestamos);
 		
-		JPanel panel_3 = new JPanel();
-		contentPane.add(panel_3);
+		JPanel panelFeedback = new JPanel();
+		panelNorte.add(panelFeedback);
 		
-		JButton btnNewButton_3 = new JButton("New button");
-		panel_3.add(btnNewButton_3);
+		JPanel panelCentral = new JPanel();
+		panelCentral.setLayout(new BorderLayout(0, 0));
+		alumno = new AlumnoView();
+		libro = new LibroView();
+		prestamo = new PrestamoView();
 		
-		JPanel panel_4 = new JPanel();
-		contentPane.add(panel_4);
+		contentPane.add(panelCentral, BorderLayout.CENTER);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		panel_4.add(btnNewButton_1);
+		btnAlumno.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				for(Component c : panelCentral.getComponents()) {
+					panelCentral.remove(c);
+				}
+				panelCentral.add(alumno, BorderLayout.CENTER);
+				alumno.setVisible(true);
+				libro.setVisible(false);
+				prestamo.setVisible(false);
+				
+			}
+		});
 		
-		JLabel label_2 = new JLabel("");
-		contentPane.add(label_2);
+		btnLibro.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				for(Component c : panelCentral.getComponents()) {
+					panelCentral.remove(c);
+				}
+				panelCentral.add(libro, BorderLayout.CENTER);
+				libro.setVisible(true);
+				alumno.setVisible(false);
+				prestamo.setVisible(false);
+				
+			}
+		});
 		
-		JLabel label_3 = new JLabel("");
-		contentPane.add(label_3);
+		btnPrestamos.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				
+				for(Component c : panelCentral.getComponents()) {
+					panelCentral.remove(c);
+				}
+				panelCentral.add(prestamo, BorderLayout.CENTER);
+				prestamo.setVisible(true);
+				libro.setVisible(false);
+				alumno.setVisible(false);
+				
+			}
+		});
 	}
 
 }

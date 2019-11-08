@@ -38,7 +38,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
 
-public class AlumnoView extends JPanel {
+public class PrestamoView extends JPanel {
 
 	private JTextField inputDni;
 	private JTextField inputNombre;
@@ -59,7 +59,7 @@ public class AlumnoView extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public AlumnoView() {
+	public PrestamoView() {
 		alumnoController = new AlumnoController();
 		setVisible(false);
 		
@@ -78,7 +78,7 @@ public class AlumnoView extends JPanel {
 		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 		panel.setLayout(gbl_panel);
 		
-		JLabel lblDni = new JLabel("DNI");
+		JLabel lblDni = new JLabel("PRESTAMO");
 		GridBagConstraints gbc_lblDni = new GridBagConstraints();
 		gbc_lblDni.anchor = GridBagConstraints.WEST;
 		gbc_lblDni.insets = new Insets(0, 0, 5, 5);

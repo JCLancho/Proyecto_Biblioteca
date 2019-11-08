@@ -1,6 +1,7 @@
 package Vista;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -41,7 +42,7 @@ public class AlumnoDetalle extends JDialog {
 
 	
 	
-	public AlumnoDetalle(JFrame frame, String titulo) {
+	public AlumnoDetalle(Container c, String titulo) {
 		alumnoController = new AlumnoController();
 		dibujar();
 		eventos();
@@ -49,12 +50,12 @@ public class AlumnoDetalle extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(450, 300);
 		setModal(true);
-		setLocationRelativeTo(frame);
+		setLocationRelativeTo(c);
 		setVisible(true);		
 		
 	}
 	
-	public AlumnoDetalle(JFrame frame, String titulo, String dni, String nombre, String apellido1, String apellido2) {
+	public AlumnoDetalle(Container c, String titulo, String dni, String nombre, String apellido1, String apellido2) {
 		alumnoController = new AlumnoController();
 		dibujar();
 		eventos();
@@ -63,7 +64,7 @@ public class AlumnoDetalle extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(450, 300);
 		setModal(true);
-		setLocationRelativeTo(frame);
+		setLocationRelativeTo(c);
 		setVisible(true);
 				
 	}
@@ -199,10 +200,11 @@ public class AlumnoDetalle extends JDialog {
 						JOptionPane.showMessageDialog(getContentPane(), "El DNI no puede estar vacio");
 					}else {
 						alumnoController.add(new String[] {dni, nombre, apellido1, apellido2});
+						dispose();
 					}
 				}else {
-					
 					alumnoController.update(new String[] {nombre, apellido1, apellido2}, dni);
+					dispose();
 				}
 				
 			}

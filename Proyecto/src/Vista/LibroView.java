@@ -38,7 +38,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
 
-public class AlumnoView extends JPanel {
+public class LibroView extends JPanel {
 
 	private JTextField inputDni;
 	private JTextField inputNombre;
@@ -59,7 +59,7 @@ public class AlumnoView extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public AlumnoView() {
+	public LibroView() {
 		alumnoController = new AlumnoController();
 		setVisible(false);
 		
@@ -78,7 +78,7 @@ public class AlumnoView extends JPanel {
 		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 		panel.setLayout(gbl_panel);
 		
-		JLabel lblDni = new JLabel("DNI");
+		JLabel lblDni = new JLabel("ISBN");
 		GridBagConstraints gbc_lblDni = new GridBagConstraints();
 		gbc_lblDni.anchor = GridBagConstraints.WEST;
 		gbc_lblDni.insets = new Insets(0, 0, 5, 5);
@@ -255,7 +255,7 @@ public class AlumnoView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				new AlumnoDetalle(getParent(), "Añadir alumno");
+				AlumnoDetalle ad = new AlumnoDetalle(getParent(), "Añadir alumno");
 				filtrar();
 				
 			}
@@ -282,7 +282,6 @@ public class AlumnoView extends JPanel {
 		String nombre = modelo.getValueAt(r, 1).toString();
 		String apellido1 = modelo.getValueAt(r, 2).toString();
 		String apellido2 = modelo.getValueAt(r, 3).toString();
-		new AlumnoDetalle(getParent(), "Editar alumno", dni, nombre, apellido1, apellido2);
 			
 	}
 }
