@@ -41,11 +41,11 @@ public class AlumnoDaoImp implements AlumnoDao{
 	}
 
 	@Override
-	public List<Alumno> findAll(String[] params) {
+	public List<Alumno> findAll(Alumno filtro) {
 		cc = new ConnectionController();
-		appendWhere(params);
+		String[] params = appendWhere(filtro);
 		List<Alumno> lista = new ArrayList<Alumno>();
-		ResultSet rs  = cc.findAll(query, appendWhere(params));
+		ResultSet rs  = cc.findAll(query, params);
 		if(rs != null) {
 			try {
 				while(rs.next()) {
@@ -87,26 +87,26 @@ public class AlumnoDaoImp implements AlumnoDao{
 		cc.cerrar();
 	}
 	
-	private String[] appendWhere(String[] params) {
+	private String[] appendWhere(Alumno filtro) {
 		query = AlumnoDaoSql.FIND_ALL;
 		StringBuffer q = new StringBuffer(query);
 		ArrayList<String> listaParametros = new ArrayList<String>();
-		if(params.length > 0) {
-			if(!params[0].equals("")) {
-				q.append(" AND UPPER(DNI) = UPPER(?)");
-				listaParametros.add(params[0]);
+		if(filtro != null) {
+			if(filtro.getDni() != null && !filtro.getDni().equals("")) {
+				q.append(" AND UPPER(DNI) LIKE CONCAT('%', UPPER(?),'%')");
+				listaParametros.add(filtro.getDni());
 			}
-			if(!params[1].equals("")) {
-				q.append(" AND NOMBRE = UPPER(?)");
-				listaParametros.add(params[1]);
+			if(filtro.getNombre() != null && !filtro.getNombre().equals("")) {
+				q.append(" AND UPPER(NOMBRE) LIKE CONCAT('%', UPPER(?),'%')");
+				listaParametros.add(filtro.getNombre());
 			}
-			if(!params[2].equals("")) {
-				q.append(" AND APELLIDO1 = UPPER(?)");
-				listaParametros.add(params[2]);
+			if(filtro.getApellido1() != null && !filtro.getApellido1().equals("")) {
+				q.append(" AND UPPER(APELLIDO1) LIKE CONCAT('%', UPPER(?),'%')");
+				listaParametros.add(filtro.getApellido1());
 			}
-			if(!params[3].equals("")) {
-				q.append(" AND APELLIDO2 = UPPER(?)");
-				listaParametros.add(params[3]);
+			if(filtro.getApellido2() != null && !filtro.getApellido2().equals("")) {
+				q.append(" AND UPPER(APELLIDO2) LIKE CONCAT('%', UPPER(?),'%')");
+				listaParametros.add(filtro.getApellido2());
 			}
 		}
 		this.query = q.toString();

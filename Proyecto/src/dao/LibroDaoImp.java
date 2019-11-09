@@ -5,33 +5,46 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Controller.AsignaturaController;
 import Controller.ConnectionController;
-import model.Alumno;
+import Controller.EstadoController;
+import model.Asignatura;
+import model.Estado;
+import model.Libro;
 
-public class LibroDaoImp implements AlumnoDao{
+public class LibroDaoImp implements LibroDao{
 	
 	private ConnectionController cc;
 	private String query;
+	private AsignaturaController asignaturaController;
+	private EstadoController estadoController;
 	
 	public LibroDaoImp() {
-		
+		asignaturaController = new AsignaturaController();
+		estadoController = new EstadoController();
 	}
 
 	@Override
-	public Alumno find(String dni) {
+	public Libro find(String isbn) {
 		cc = new ConnectionController();
-		ResultSet rs = cc.find(AlumnoDaoSql.FIND, new String[] {dni});
+		ResultSet rs = cc.find(LibroDaoSql.FIND, new String[] {isbn});
 		if(rs != null) {
 			try {
-				Alumno alumno = new Alumno();
+				Libro libro = new Libro();
 				if(rs.next()) {
-					alumno.setDni(rs.getString("DNI"));
-					alumno.setNombre(rs.getString("NOMBRE"));
-					alumno.setApellido1(rs.getString("APELLIDO1"));
-					alumno.setApellido2(rs.getString("APELLIDO2"));
+					libro.setIsbn(rs.getString("ISBN"));
+					libro.setTitulo(rs.getString("TITULO"));
+					libro.setAutor(rs.getString("AUTOR"));
+					libro.setEditorial(rs.getString("EDITORIAL"));
+					
+					Asignatura asignatura = asignaturaController.find(rs.getLong("COD_ASIGNATURA"));
+					libro.setAsignatura(asignatura);
+					
+					Estado estado = estadoController.find(rs.getString("COD_ESTADO"));
+					libro.setEstado(estado);
 				}
 				rs.close();
-				return alumno;
+				return libro;
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -41,20 +54,26 @@ public class LibroDaoImp implements AlumnoDao{
 	}
 
 	@Override
-	public List<Alumno> findAll(String[] params) {
+	public List<Libro> findAll(Libro filtro) {
 		cc = new ConnectionController();
-		appendWhere(params);
-		List<Alumno> lista = new ArrayList<Alumno>();
-		ResultSet rs  = cc.findAll(query, appendWhere(params));
+		String[] params = appendWhere(filtro);
+		List<Libro> lista = new ArrayList<Libro>();
+		ResultSet rs  = cc.findAll(query, params);
 		if(rs != null) {
 			try {
 				while(rs.next()) {
-					Alumno alumno = new Alumno();
-					alumno.setDni(rs.getString("DNI"));
-					alumno.setNombre(rs.getString("NOMBRE"));
-					alumno.setApellido1(rs.getString("APELLIDO1"));
-					alumno.setApellido2(rs.getString("APELLIDO2"));
-					lista.add(alumno);
+					Libro libro = new Libro();
+					libro.setIsbn(rs.getString("ISBN"));
+					libro.setTitulo(rs.getString("TITULO"));
+					libro.setAutor(rs.getString("AUTOR"));
+					libro.setEditorial(rs.getString("EDITORIAL"));
+					
+					Asignatura asignatura = asignaturaController.find(rs.getLong("ASIGNATURA"));
+					libro.setAsignatura(asignatura);
+					
+					Estado estado = estadoController.find(rs.getString("ESTADO"));
+					libro.setEstado(estado);
+					lista.add(libro);
 				}
 				rs.close();
 			} catch (SQLException e) {
@@ -68,45 +87,53 @@ public class LibroDaoImp implements AlumnoDao{
 	@Override
 	public void add(String[] valores) {
 		cc = new ConnectionController();
-		cc.add(AlumnoDaoSql.INSERT_INTO, valores);
+		cc.add(LibroDaoSql.INSERT_INTO, valores);
 		cc.cerrar();
 	}
 
 	@Override
-	public void update(String[] valores, String dni) {
+	public void update(String[] valores, String isbn) {
 		cc = new ConnectionController();
-		cc.update(AlumnoDaoSql.UPDATE_SET, valores, new String[] {dni});
+		cc.update(LibroDaoSql.UPDATE_SET, valores, new String[] {isbn});
 		cc.cerrar(); 
 		
 	}
 
 	@Override
-	public void delete(String dni) {
+	public void delete(String isbn) {
 		cc = new ConnectionController();
-		cc.delete(AlumnoDaoSql.DELETE_WHERE, new String[] {dni});
+		cc.delete(LibroDaoSql.DELETE_WHERE, new String[] {isbn});
 		cc.cerrar();
 	}
 	
-	private String[] appendWhere(String[] params) {
-		query = AlumnoDaoSql.FIND_ALL;
+	private String[] appendWhere(Libro filtro) {
+		this.query = LibroDaoSql.FIND_ALL;
 		StringBuffer q = new StringBuffer(query);
 		ArrayList<String> listaParametros = new ArrayList<String>();
-		if(params.length > 0) {
-			if(!params[0].equals("")) {
-				q.append(" AND UPPER(DNI) = UPPER(?)");
-				listaParametros.add(params[0]);
+		if(filtro != null) {
+			if(filtro.getIsbn() != null && !filtro.getIsbn().equals("")) {
+				q.append(" AND UPPER(ISBN) LIKE CONCAT('%', UPPER(?),'%')");
+				listaParametros.add(filtro.getIsbn());
 			}
-			if(!params[1].equals("")) {
-				q.append(" AND NOMBRE = UPPER(?)");
-				listaParametros.add(params[1]);
+			if(filtro.getTitulo() != null && !filtro.getTitulo().equals("")) {
+				q.append(" AND UPPER(TITULO) LIKE CONCAT('%', UPPER(?),'%')");
+				listaParametros.add(filtro.getTitulo());
 			}
-			if(!params[2].equals("")) {
-				q.append(" AND APELLIDO1 = UPPER(?)");
-				listaParametros.add(params[2]);
+			if(filtro.getAutor()!= null && !filtro.getAutor().equals("")) {
+				q.append(" AND UPPER(AUTOR) LIKE CONCAT('%', UPPER(?),'%')");
+				listaParametros.add(filtro.getAutor());
 			}
-			if(!params[3].equals("")) {
-				q.append(" AND APELLIDO2 = UPPER(?)");
-				listaParametros.add(params[3]);
+			if(filtro.getEditorial() != null && !filtro.getEditorial().equals("")) {
+				q.append(" AND UPPER(EDITORIAL) LIKE CONCAT('%', UPPER(?),'%')");
+				listaParametros.add(filtro.getEditorial());
+			}
+			if(filtro.getAsignatura() != null && filtro.getAsignatura().getCodAsignatura() != null && !filtro.getAsignatura().getCodAsignatura().equals("")) {
+				q.append(" AND ASIGNATURA = ?");
+				listaParametros.add(filtro.getAsignatura().getCodAsignatura().toString());
+			}
+			if(filtro.getEstado() != null && filtro.getEstado().getCodigo() != null && !filtro.getEstado().getCodigo().equals("")) {
+				q.append(" AND UPPER(ESTADO) = UPPER(?)");
+				listaParametros.add(filtro.getEstado().getCodigo());
 			}
 		}
 		this.query = q.toString();

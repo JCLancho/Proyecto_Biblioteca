@@ -3,7 +3,6 @@ package Vista;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,16 +10,16 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -28,25 +27,19 @@ import Controller.AlumnoController;
 
 public class AlumnoDetalle extends JDialog {
 
-	private JPanel contentPane;
-	private JTextField inputDni;
-	private JTextField inputNombre;
-	private JTextField inputApellido1;
-	private JTextField inputApellido2;
-	private JPanel panel_1;
-	private JPanel panel_2;
-	private JPanel panel_3;
-	private JButton btnGuardar;
-	private JButton btnCancelar;
+	private JPanel contentPane, panel_1, panel_2, panel_3;
+	private JTextField inputDni, inputNombre, inputApellido1, inputApellido2;
+	private JButton btnGuardar, btnCancelar;
+
 	private AlumnoController alumnoController;
 
 	
 	
-	public AlumnoDetalle(Container c, String titulo) {
+	public AlumnoDetalle(Container c) {
 		alumnoController = new AlumnoController();
 		dibujar();
 		eventos();
-		setTitle(titulo);
+		setTitle("Añadir Alumno");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(450, 300);
 		setModal(true);
@@ -55,12 +48,12 @@ public class AlumnoDetalle extends JDialog {
 		
 	}
 	
-	public AlumnoDetalle(Container c, String titulo, String dni, String nombre, String apellido1, String apellido2) {
+	public AlumnoDetalle(Container c, String dni, String nombre, String apellido1, String apellido2) {
 		alumnoController = new AlumnoController();
 		dibujar();
 		eventos();
 		rellenarCampos(dni, nombre, apellido1, apellido2);
-		setTitle(titulo);
+		setTitle("Editar Alumno");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(450, 300);
 		setModal(true);
@@ -166,12 +159,10 @@ public class AlumnoDetalle extends JDialog {
 		panel_2.add(panel_3);
 		
 		btnGuardar = new JButton("Guardar");
-
+		btnGuardar.setPreferredSize(new Dimension(90, 25));
 		panel_3.add(btnGuardar);
-		btnGuardar.setHorizontalTextPosition(SwingConstants.LEADING);
-		btnGuardar.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		btnCancelar = new JButton("Salir");
+		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setPreferredSize(new Dimension(90, 25));
 		panel_3.add(btnCancelar);
 	}
@@ -200,15 +191,18 @@ public class AlumnoDetalle extends JDialog {
 						JOptionPane.showMessageDialog(getContentPane(), "El DNI no puede estar vacio");
 					}else {
 						alumnoController.add(new String[] {dni, nombre, apellido1, apellido2});
+						AlumnoView.btnInvisible.doClick();
 						dispose();
 					}
 				}else {
 					alumnoController.update(new String[] {nombre, apellido1, apellido2}, dni);
+					AlumnoView.btnInvisible.doClick();
 					dispose();
 				}
 				
 			}
 		});
+	
 	}
 	
 	

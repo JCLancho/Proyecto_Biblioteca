@@ -19,9 +19,9 @@ public class PrestamoController {
 		
 	};
 	
-	public List<Alumno> findAll(String[] params) {
-		return alumnoDao.findAll(params);
-	}
+//	public List<Alumno> findAll(String[] params) {
+//		return alumnoDao.findAll(params);
+//	}
 	
 	public void add(String[] valores) {
 		alumnoDao.add(valores);

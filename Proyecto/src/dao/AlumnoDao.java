@@ -10,7 +10,7 @@ public interface AlumnoDao {
 
 	Alumno find(String dni);
 	
-	List<Alumno> findAll(String[] params);
+	List<Alumno> findAll(Alumno filtro);
 	
 	void add(String[] valores);
 	

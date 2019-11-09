@@ -54,6 +54,8 @@ public class PrestamoView extends JPanel {
 	private JPanel panel_3;
 	private DefaultTableModel modelo;
 	private AlumnoController alumnoController;
+	private JPanel panel_4;
+	private JScrollPane scrollPane_1;
 
 
 	/**
@@ -195,6 +197,13 @@ public class PrestamoView extends JPanel {
 		table.setModel(modelo);
 		scrollPane.setViewportView(table);
 		
+		panel_4 = new JPanel();
+		add(panel_4);
+		panel_4.setLayout(new BorderLayout(0, 0));
+		
+		scrollPane_1 = new JScrollPane();
+		add(scrollPane_1);
+		
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -255,7 +264,7 @@ public class PrestamoView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				new AlumnoDetalle(getParent(), "Añadir alumno");
+//				new AlumnoDetalle(getParent(), "Añadir alumno");
 				filtrar();
 				
 			}
@@ -266,14 +275,14 @@ public class PrestamoView extends JPanel {
 	}
 	
 	public void filtrar() {
-		modelo.setRowCount(0);
-		String[] params = {inputDni.getText(), inputNombre.getText(), inputApellido1.getText(), inputApellido2.getText()};
-		List<Alumno> lista = alumnoController.findAll(params);
-		for(Alumno alumno : lista) {
-			modelo.addRow(new Object[] {
-					alumno.getDni(), alumno.getNombre(), alumno.getApellido1(), alumno.getApellido2()
-			});
-		}
+//		modelo.setRowCount(0);
+//		String[] params = {inputDni.getText(), inputNombre.getText(), inputApellido1.getText(), inputApellido2.getText()};
+//		List<Alumno> lista = alumnoController.findAll(params);
+//		for(Alumno alumno : lista) {
+//			modelo.addRow(new Object[] {
+//					alumno.getDni(), alumno.getNombre(), alumno.getApellido1(), alumno.getApellido2()
+//			});
+//		}
 	}
 
 	private void editar() {
@@ -282,7 +291,16 @@ public class PrestamoView extends JPanel {
 		String nombre = modelo.getValueAt(r, 1).toString();
 		String apellido1 = modelo.getValueAt(r, 2).toString();
 		String apellido2 = modelo.getValueAt(r, 3).toString();
-		new AlumnoDetalle(getParent(), "Editar alumno", dni, nombre, apellido1, apellido2);
+//		new AlumnoDetalle(getParent(), "Editar alumno", dni, nombre, apellido1, apellido2);
 			
+	}
+	
+	public void limpiar() {
+		inputDni.setText("");
+		inputNombre.setText("");
+		inputApellido1.setText("");
+		inputApellido2.setText("");
+		modelo.setRowCount(0);
+		
 	}
 }

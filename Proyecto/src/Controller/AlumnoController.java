@@ -19,8 +19,8 @@ public class AlumnoController {
 		
 	};
 	
-	public List<Alumno> findAll(String[] params) {
-		return alumnoDao.findAll(params);
+	public List<Alumno> findAll(Alumno filtro) {
+		return alumnoDao.findAll(filtro);
 	}
 	
 	public void add(String[] valores) {

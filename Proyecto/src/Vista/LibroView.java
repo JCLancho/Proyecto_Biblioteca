@@ -1,10 +1,6 @@
 package Vista;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -14,7 +10,6 @@ import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 
 import java.awt.Insets;
 import javax.swing.JTable;
@@ -22,47 +17,64 @@ import javax.swing.table.DefaultTableModel;
 
 import java.util.List;
 
-import Controller.AlumnoController;
-import model.Alumno;
+import Controller.AsignaturaController;
+import Controller.EstadoController;
+import Controller.LibroController;
+import model.Asignatura;
+import model.Estado;
+import model.Libro;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
+import java.awt.Component;
 
 public class LibroView extends JPanel {
 
-	private JTextField inputDni;
-	private JTextField inputNombre;
-	private JTextField inputApellido1;
-	private JTextField inputApellido2;
+	private JTextField inputISBN, inputTitulo, inputAutor, inputEditorial;
 	private JTable table;
-	private JPanel panel_1;
-	private JPanel panel_2;
-	private JButton btnAnadir;
-	private JButton btnBuscar;
-	private JButton btnEditar;
-	private JButton btnBorrar;
-	private JPanel panel_3;
+	private JPanel panel_1, panel_2, panel_3, panel_4, panel_5;
+	private JButton btnAnadir, btnBuscar, btnEditar, btnBorrar, btnLimpiar, btnAgregarAsignatura;
 	private DefaultTableModel modelo;
-	private AlumnoController alumnoController;
+	private JLabel lblAsignatura, lblEstado;
+	private JComboBox<Estado> comboEstado;
+	private JComboBox<Asignatura> comboAsignatura;
+	private DefaultComboBoxModel<Asignatura> modeloAsignaturas;
+	private DefaultComboBoxModel<Estado> modeloEstados;
+	
+	private AsignaturaController asignaturaController;
+	private EstadoController estadoController;
+	private LibroController libroController;
+	
+	public static JButton btnFiltrar, btnCargarAsignaturas;
 
 
 	/**
 	 * Create the frame.
 	 */
 	public LibroView() {
-		alumnoController = new AlumnoController();
+		libroController = new LibroController();
+		asignaturaController = new AsignaturaController();
+		estadoController = new EstadoController();
 		setVisible(false);
+		dibujar();
+		eventos();
 		
+	}
+	
+	private void dibujar() {
 		this.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		panel_1 = new JPanel();
@@ -72,88 +84,145 @@ public class LibroView extends JPanel {
 		JPanel panel = new JPanel();
 		panel_1.add(panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] {30, 180, 30, 180};
-		gbl_panel.rowHeights = new int[] {5, 20, 5, 20, 5, 20, 5, 20, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+		gbl_panel.columnWidths = new int[] {180, 180};
+		gbl_panel.rowHeights = new int[] {20, 5, 20, 5, 20, 5};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 		panel.setLayout(gbl_panel);
 		
-		JLabel lblDni = new JLabel("ISBN");
-		GridBagConstraints gbc_lblDni = new GridBagConstraints();
-		gbc_lblDni.anchor = GridBagConstraints.WEST;
-		gbc_lblDni.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDni.gridx = 1;
-		gbc_lblDni.gridy = 1;
-		panel.add(lblDni, gbc_lblDni);
+		JLabel lblISBN = new JLabel("ISBN");
+		GridBagConstraints gbc_lblISBN = new GridBagConstraints();
+		gbc_lblISBN.anchor = GridBagConstraints.WEST;
+		gbc_lblISBN.insets = new Insets(0, 0, 5, 5);
+		gbc_lblISBN.gridx = 0;
+		gbc_lblISBN.gridy = 0;
+		panel.add(lblISBN, gbc_lblISBN);
 		
-		inputDni = new JTextField();
-		GridBagConstraints gbc_inputDni = new GridBagConstraints();
-		gbc_inputDni.fill = GridBagConstraints.BOTH;
-		gbc_inputDni.insets = new Insets(0, 0, 5, 5);
-		gbc_inputDni.gridx = 1;
-		gbc_inputDni.gridy = 2;
-		panel.add(inputDni, gbc_inputDni);
-		inputDni.setColumns(10);
+		inputISBN = new JTextField();
+		inputISBN.setToolTipText("13 digitos");
+		GridBagConstraints gbc_inputISBN = new GridBagConstraints();
+		gbc_inputISBN.anchor = GridBagConstraints.WEST;
+		gbc_inputISBN.fill = GridBagConstraints.VERTICAL;
+		gbc_inputISBN.insets = new Insets(0, 0, 5, 5);
+		gbc_inputISBN.gridx = 0;
+		gbc_inputISBN.gridy = 1;
+		panel.add(inputISBN, gbc_inputISBN);
+		inputISBN.setColumns(15);
 		
-		JLabel lblNombre = new JLabel("Nombre");
-		GridBagConstraints gbc_lblNombre = new GridBagConstraints();
-		gbc_lblNombre.anchor = GridBagConstraints.WEST;
-		gbc_lblNombre.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNombre.gridx = 3;
-		gbc_lblNombre.gridy = 1;
-		panel.add(lblNombre, gbc_lblNombre);
+		JLabel lblTitulo = new JLabel("Titulo");
+		GridBagConstraints gbc_lblTitulo = new GridBagConstraints();
+		gbc_lblTitulo.anchor = GridBagConstraints.WEST;
+		gbc_lblTitulo.insets = new Insets(0, 0, 5, 0);
+		gbc_lblTitulo.gridx = 1;
+		gbc_lblTitulo.gridy = 0;
+		panel.add(lblTitulo, gbc_lblTitulo);
 		
-		inputNombre = new JTextField();
-		GridBagConstraints gbc_inputNombre = new GridBagConstraints();
-		gbc_inputNombre.insets = new Insets(0, 0, 5, 0);
-		gbc_inputNombre.fill = GridBagConstraints.HORIZONTAL;
-		gbc_inputNombre.gridx = 3;
-		gbc_inputNombre.gridy = 2;
-		panel.add(inputNombre, gbc_inputNombre);
-		inputNombre.setColumns(20);
+		inputTitulo = new JTextField();
+		GridBagConstraints gbc_inputTitulo = new GridBagConstraints();
+		gbc_inputTitulo.insets = new Insets(0, 0, 5, 0);
+		gbc_inputTitulo.fill = GridBagConstraints.HORIZONTAL;
+		gbc_inputTitulo.gridx = 1;
+		gbc_inputTitulo.gridy = 1;
+		panel.add(inputTitulo, gbc_inputTitulo);
+		inputTitulo.setColumns(30);
 		
-		JLabel lblApellido1 = new JLabel("Apellido 1");
-		GridBagConstraints gbc_lblApellido1 = new GridBagConstraints();
-		gbc_lblApellido1.anchor = GridBagConstraints.WEST;
-		gbc_lblApellido1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblApellido1.gridx = 1;
-		gbc_lblApellido1.gridy = 3;
-		panel.add(lblApellido1, gbc_lblApellido1);
+		JLabel lblAutor = new JLabel("Autor");
+		GridBagConstraints gbc_lblAutor = new GridBagConstraints();
+		gbc_lblAutor.anchor = GridBagConstraints.WEST;
+		gbc_lblAutor.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAutor.gridx = 0;
+		gbc_lblAutor.gridy = 2;
+		panel.add(lblAutor, gbc_lblAutor);
 		
-		JLabel lblApellido2 = new JLabel("Apellido 2");
-		GridBagConstraints gbc_lblApellido2 = new GridBagConstraints();
-		gbc_lblApellido2.anchor = GridBagConstraints.WEST;
-		gbc_lblApellido2.insets = new Insets(0, 0, 5, 0);
-		gbc_lblApellido2.gridx = 3;
-		gbc_lblApellido2.gridy = 3;
-		panel.add(lblApellido2, gbc_lblApellido2);
+		inputAutor = new JTextField();
+		GridBagConstraints gbc_inputAutor = new GridBagConstraints();
+		gbc_inputAutor.fill = GridBagConstraints.BOTH;
+		gbc_inputAutor.insets = new Insets(0, 0, 5, 5);
+		gbc_inputAutor.gridx = 0;
+		gbc_inputAutor.gridy = 3;
+		panel.add(inputAutor, gbc_inputAutor);
+		inputAutor.setColumns(30);
 		
-		inputApellido1 = new JTextField();
-		GridBagConstraints gbc_inputApellido1 = new GridBagConstraints();
-		gbc_inputApellido1.fill = GridBagConstraints.BOTH;
-		gbc_inputApellido1.insets = new Insets(0, 0, 5, 5);
-		gbc_inputApellido1.gridx = 1;
-		gbc_inputApellido1.gridy = 4;
-		panel.add(inputApellido1, gbc_inputApellido1);
-		inputApellido1.setColumns(10);
+		JLabel lblEditorial = new JLabel("Editorial");
+		GridBagConstraints gbc_lblEditorial = new GridBagConstraints();
+		gbc_lblEditorial.anchor = GridBagConstraints.WEST;
+		gbc_lblEditorial.insets = new Insets(0, 0, 5, 0);
+		gbc_lblEditorial.gridx = 1;
+		gbc_lblEditorial.gridy = 2;
+		panel.add(lblEditorial, gbc_lblEditorial);
+				
+		inputEditorial = new JTextField();
+		GridBagConstraints gbc_inputEditorial = new GridBagConstraints();
+		gbc_inputEditorial.insets = new Insets(0, 0, 5, 0);
+		gbc_inputEditorial.fill = GridBagConstraints.HORIZONTAL;
+		gbc_inputEditorial.gridx = 1;
+		gbc_inputEditorial.gridy = 3;
+		panel.add(inputEditorial, gbc_inputEditorial);
+		inputEditorial.setColumns(30);
 		
-		inputApellido2 = new JTextField();
-		GridBagConstraints gbc_inputApellido2 = new GridBagConstraints();
-		gbc_inputApellido2.insets = new Insets(0, 0, 5, 0);
-		gbc_inputApellido2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_inputApellido2.gridx = 3;
-		gbc_inputApellido2.gridy = 4;
-		panel.add(inputApellido2, gbc_inputApellido2);
-		inputApellido2.setColumns(10);
+		lblAsignatura = new JLabel("Asignatura");
+		GridBagConstraints gbc_lblAsignatura = new GridBagConstraints();
+		gbc_lblAsignatura.anchor = GridBagConstraints.WEST;
+		gbc_lblAsignatura.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAsignatura.gridx = 0;
+		gbc_lblAsignatura.gridy = 4;
+		panel.add(lblAsignatura, gbc_lblAsignatura);
+		
+		panel_5 = new JPanel();
+		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
+		gbc_panel_5.fill = GridBagConstraints.BOTH;
+		gbc_panel_5.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_5.gridx = 0;
+		gbc_panel_5.gridy = 5;
+		panel.add(panel_5, gbc_panel_5);
+		panel_5.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		
+		comboAsignatura = new JComboBox<Asignatura>();
+		panel_5.add(comboAsignatura);
+
+		lblEstado = new JLabel("Estado");
+		GridBagConstraints gbc_lblEstado = new GridBagConstraints();
+		gbc_lblEstado.anchor = GridBagConstraints.WEST;
+		gbc_lblEstado.insets = new Insets(0, 0, 5, 0);
+		gbc_lblEstado.gridx = 1;
+		gbc_lblEstado.gridy = 4;
+		panel.add(lblEstado, gbc_lblEstado);
+		
+		comboEstado = new JComboBox<Estado>();
+		GridBagConstraints gbc_comboEstado = new GridBagConstraints();
+		gbc_comboEstado.anchor = GridBagConstraints.WEST;
+		gbc_comboEstado.gridx = 1;
+		gbc_comboEstado.gridy = 5;
+		panel.add(comboEstado, gbc_comboEstado);
+		
+		btnAgregarAsignatura = new JButton("+");
+		panel_5.add(btnAgregarAsignatura);
 		
 		panel_2 = new JPanel();
 		panel_1.add(panel_2, BorderLayout.SOUTH);
 		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
 		
+		panel_4 = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panel_4.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
+		panel_2.add(panel_4);
+		
 		btnBuscar = new JButton("Buscar");
-		btnBuscar.setHorizontalTextPosition(SwingConstants.LEFT);
-		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
-		panel_2.add(btnBuscar);
+		btnBuscar.setPreferredSize(new Dimension(85, 25));
+		panel_4.add(btnBuscar);
+		
+		btnLimpiar = new JButton("Limpiar");
+		btnLimpiar.setPreferredSize(new Dimension(85, 25));
+		panel_4.add(btnLimpiar);
+		
+		btnFiltrar = new JButton();
+		btnFiltrar.setVisible(false);
+		panel_4.add(btnFiltrar);
+		
+		btnCargarAsignaturas = new JButton();
+		btnCargarAsignaturas.setVisible(false);
+		panel_4.add(btnCargarAsignaturas);
+
 		
 		panel_3 = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_3.getLayout();
@@ -161,19 +230,16 @@ public class LibroView extends JPanel {
 		panel_2.add(panel_3);
 		
 		btnAnadir = new JButton("Añadir");
-		btnAnadir.setPreferredSize(new Dimension(80, 25));
-
+		btnAnadir.setPreferredSize(new Dimension(85, 25));
 		panel_3.add(btnAnadir);
-		btnAnadir.setHorizontalTextPosition(SwingConstants.LEADING);
-		btnAnadir.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		btnEditar = new JButton("Editar");
-		btnEditar.setPreferredSize(new Dimension(80, 25));
+		btnEditar.setPreferredSize(new Dimension(85, 25));
 		btnEditar.setEnabled(false);
 		panel_3.add(btnEditar);
 		
 		btnBorrar = new JButton("Borrar");
-		btnBorrar.setPreferredSize(new Dimension(80, 25));
+		btnBorrar.setPreferredSize(new Dimension(85, 25));
 		btnBorrar.setEnabled(false);
 		panel_3.add(btnBorrar);
 		
@@ -189,13 +255,19 @@ public class LibroView extends JPanel {
 		    }
 		};
 		modelo.setColumnIdentifiers(new String[] {
-				"DNI", "Nombre", "Apellido 1", "Apellido 2"
+				"ISBN", "Título", "Autor", "Editorial", "Asignatura", "Estado"
 			});
 
 		table.setModel(modelo);
 		scrollPane.setViewportView(table);
 		
+		llenarComboAsignatura();
+		llenarComboEstado();
 		
+		
+	}
+	
+	private void eventos() {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				filtrar();
@@ -235,7 +307,7 @@ public class LibroView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				String dni = modelo.getValueAt(table.getSelectedRow(), 0).toString();
-				alumnoController.delete(dni);
+				libroController.delete(dni);
 				filtrar();
 				
 			}
@@ -247,6 +319,7 @@ public class LibroView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				editar();
+				
 			}
 		});
 		
@@ -255,33 +328,124 @@ public class LibroView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				AlumnoDetalle ad = new AlumnoDetalle(getParent(), "Añadir alumno");
-				filtrar();
+				new LibroDetalle(getParent());
 				
 			}
 		});
 		
-	
+		btnLimpiar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				limpiar();
+				
+			}
+		});
+		
+		btnAgregarAsignatura.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				new AsignaturaDetalle(getParent());
+				
+			}
+		});
+		
+		btnFiltrar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				filtrar();				
+			}
+		});
+		
+		btnCargarAsignaturas.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				llenarComboAsignatura();
+				
+			}
+		});
+		
 		
 	}
 	
 	public void filtrar() {
 		modelo.setRowCount(0);
-		String[] params = {inputDni.getText(), inputNombre.getText(), inputApellido1.getText(), inputApellido2.getText()};
-		List<Alumno> lista = alumnoController.findAll(params);
-		for(Alumno alumno : lista) {
+		Libro filtro = new Libro();
+		filtro.setIsbn(inputISBN.getText());
+		filtro.setTitulo(inputTitulo.getText());
+		filtro.setAutor(inputAutor.getText());
+		filtro.setEditorial(inputEditorial.getText());
+		filtro.setAsignatura((Asignatura) comboAsignatura.getSelectedItem());
+		filtro.setEstado((Estado) comboEstado.getSelectedItem());
+		List<Libro> lista = libroController.findAll(filtro);
+		for(Libro libro : lista) {
 			modelo.addRow(new Object[] {
-					alumno.getDni(), alumno.getNombre(), alumno.getApellido1(), alumno.getApellido2()
+					libro.getIsbn(), libro.getTitulo(), libro.getAutor(), libro.getEditorial(), libro.getAsignatura().getAbreviatura(), libro.getEstado().getDescripcion()
 			});
 		}
 	}
 
 	private void editar() {
 		int r = table.getSelectedRow();
-		String dni = modelo.getValueAt(r, 0).toString();
-		String nombre = modelo.getValueAt(r, 1).toString();
-		String apellido1 = modelo.getValueAt(r, 2).toString();
-		String apellido2 = modelo.getValueAt(r, 3).toString();
+		String isbn = modelo.getValueAt(r, 0).toString();
+		String titulo = modelo.getValueAt(r, 1).toString();
+		String autor = modelo.getValueAt(r, 2).toString();
+		String editorial = modelo.getValueAt(r, 3).toString();
+		String asignaturaAbreviatura = modelo.getValueAt(r, 4).toString();
+		String estadoDescripcion = modelo.getValueAt(r, 5).toString();
+		
+		Asignatura asignatura = new Asignatura();
+		asignatura.setAbreviatura(asignaturaAbreviatura);
+		for(Asignatura a : asignaturaController.findAll(asignatura)) {
+			if(asignaturaAbreviatura.equals(a.getAbreviatura())) {
+				asignatura.setCodAsignatura(a.getCodAsignatura());
+				asignatura.setNombreAsignatura(a.getNombreAsignatura());
+				asignatura.setAbreviatura(a.getAbreviatura());
+				break;
+			}
+		}
+		Estado estado = new Estado();
+		estado.setDescripcion(estadoDescripcion);
+		for(Estado e : estadoController.findAll(estado)) {
+			if(estadoDescripcion.equals(e.getDescripcion())) {
+				estado.setCodigo(e.getCodigo());
+				estado.setDescripcion(e.getDescripcion());
+				break;
+			}
+		}
+		new LibroDetalle(getParent(), isbn, titulo, autor, editorial, asignatura , estado);
 			
+	}
+	
+	public void limpiar() {
+		inputISBN.setText("");
+		inputTitulo.setText("");
+		inputAutor.setText("");
+		inputEditorial.setText("");
+		modelo.setRowCount(0);
+		comboEstado.setSelectedIndex(-1);
+		comboAsignatura.setSelectedIndex(-1);
+		
+	}
+	
+	private void llenarComboAsignatura() {
+		Asignatura[] asignaturas = asignaturaController.findAll(new Asignatura()).toArray(new Asignatura[0]);
+		modeloAsignaturas = new DefaultComboBoxModel<Asignatura>(asignaturas);
+		comboAsignatura.setModel(modeloAsignaturas);
+		comboAsignatura.setSelectedIndex(-1);
+	}
+	
+	private void llenarComboEstado() {
+		Estado[] estados = estadoController.findAll(new Estado()).toArray(new Estado[0]);
+		modeloEstados = new DefaultComboBoxModel<Estado>(estados);
+		comboEstado.setModel(modeloEstados);
+		comboEstado.setSelectedIndex(-1);
 	}
 }

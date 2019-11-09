@@ -2,21 +2,19 @@ package dao;
 
 import java.util.List;
 
-import javax.swing.tree.RowMapper;
-
-import model.Alumno;
+import model.Libro;
 
 public interface LibroDao {
 
-	Alumno find(String dni);
+	Libro find(String isbn);
 	
-	List<Alumno> findAll(String[] params);
+	List<Libro> findAll(Libro filtro);
 	
 	void add(String[] valores);
 	
-	void update(String[] valores, String dni);
+	void update(String[] valores, String isbn);
 	
-	void delete(String dni);
+	void delete(String isbn);
 		
 	
 }

@@ -1,10 +1,6 @@
 package Vista;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -14,7 +10,6 @@ import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 
 import java.awt.Insets;
 import javax.swing.JTable;
@@ -33,42 +28,37 @@ import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
 
 public class AlumnoView extends JPanel {
 
-	private JTextField inputDni;
-	private JTextField inputNombre;
-	private JTextField inputApellido1;
-	private JTextField inputApellido2;
+	private JTextField inputDni, inputNombre, inputApellido1, inputApellido2;
 	private JTable table;
-	private JPanel panel_1;
-	private JPanel panel_2;
-	private JButton btnAnadir;
-	private JButton btnBuscar;
-	private JButton btnEditar;
-	private JButton btnBorrar;
-	private JPanel panel_3;
+	private JPanel panel_1, panel_2, panel_3, panel_4;
+	private JButton btnAnadir, btnBuscar, btnEditar, btnBorrar, btnLimpiar;
 	private DefaultTableModel modelo;
+	
 	private AlumnoController alumnoController;
 
+	public static JButton btnInvisible;
 
-	/**
-	 * Create the frame.
-	 */
+
 	public AlumnoView() {
 		alumnoController = new AlumnoController();
 		setVisible(false);
+		dibujar();
+		eventos();
 		
+				
+	}
+	
+	private void dibujar() {
 		this.setLayout(new GridLayout(0, 1, 0, 0));
-		
 		panel_1 = new JPanel();
 		this.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
-		
 		JPanel panel = new JPanel();
 		panel_1.add(panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
@@ -87,8 +77,10 @@ public class AlumnoView extends JPanel {
 		panel.add(lblDni, gbc_lblDni);
 		
 		inputDni = new JTextField();
+		inputDni.setToolTipText("12345678A");
 		GridBagConstraints gbc_inputDni = new GridBagConstraints();
-		gbc_inputDni.fill = GridBagConstraints.BOTH;
+		gbc_inputDni.anchor = GridBagConstraints.WEST;
+		gbc_inputDni.fill = GridBagConstraints.VERTICAL;
 		gbc_inputDni.insets = new Insets(0, 0, 5, 5);
 		gbc_inputDni.gridx = 1;
 		gbc_inputDni.gridy = 2;
@@ -110,7 +102,7 @@ public class AlumnoView extends JPanel {
 		gbc_inputNombre.gridx = 3;
 		gbc_inputNombre.gridy = 2;
 		panel.add(inputNombre, gbc_inputNombre);
-		inputNombre.setColumns(20);
+		inputNombre.setColumns(30);
 		
 		JLabel lblApellido1 = new JLabel("Apellido 1");
 		GridBagConstraints gbc_lblApellido1 = new GridBagConstraints();
@@ -135,7 +127,7 @@ public class AlumnoView extends JPanel {
 		gbc_inputApellido1.gridx = 1;
 		gbc_inputApellido1.gridy = 4;
 		panel.add(inputApellido1, gbc_inputApellido1);
-		inputApellido1.setColumns(10);
+		inputApellido1.setColumns(30);
 		
 		inputApellido2 = new JTextField();
 		GridBagConstraints gbc_inputApellido2 = new GridBagConstraints();
@@ -144,16 +136,28 @@ public class AlumnoView extends JPanel {
 		gbc_inputApellido2.gridx = 3;
 		gbc_inputApellido2.gridy = 4;
 		panel.add(inputApellido2, gbc_inputApellido2);
-		inputApellido2.setColumns(10);
+		inputApellido2.setColumns(30);
 		
 		panel_2 = new JPanel();
 		panel_1.add(panel_2, BorderLayout.SOUTH);
 		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
 		
+		panel_4 = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panel_4.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
+		panel_2.add(panel_4);
+		
 		btnBuscar = new JButton("Buscar");
-		btnBuscar.setHorizontalTextPosition(SwingConstants.LEFT);
-		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
-		panel_2.add(btnBuscar);
+		btnBuscar.setPreferredSize(new Dimension(85, 25));
+		panel_4.add(btnBuscar);
+		
+		btnLimpiar = new JButton("Limpiar");
+		btnLimpiar.setPreferredSize(new Dimension(85, 25));
+		panel_4.add(btnLimpiar);
+		
+		btnInvisible = new JButton();
+		btnInvisible.setVisible(false);
+		panel_4.add(btnInvisible);
 		
 		panel_3 = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_3.getLayout();
@@ -161,19 +165,16 @@ public class AlumnoView extends JPanel {
 		panel_2.add(panel_3);
 		
 		btnAnadir = new JButton("Añadir");
-		btnAnadir.setPreferredSize(new Dimension(80, 25));
-
+		btnAnadir.setPreferredSize(new Dimension(85, 25));
 		panel_3.add(btnAnadir);
-		btnAnadir.setHorizontalTextPosition(SwingConstants.LEADING);
-		btnAnadir.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		btnEditar = new JButton("Editar");
-		btnEditar.setPreferredSize(new Dimension(80, 25));
+		btnEditar.setPreferredSize(new Dimension(85, 25));
 		btnEditar.setEnabled(false);
 		panel_3.add(btnEditar);
 		
 		btnBorrar = new JButton("Borrar");
-		btnBorrar.setPreferredSize(new Dimension(80, 25));
+		btnBorrar.setPreferredSize(new Dimension(85, 25));
 		btnBorrar.setEnabled(false);
 		panel_3.add(btnBorrar);
 		
@@ -194,8 +195,9 @@ public class AlumnoView extends JPanel {
 
 		table.setModel(modelo);
 		scrollPane.setViewportView(table);
-		
-		
+	}
+	
+	private void eventos() {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				filtrar();
@@ -255,20 +257,30 @@ public class AlumnoView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				new AlumnoDetalle(getParent(), "Añadir alumno");
-				filtrar();
+				new AlumnoDetalle(getParent());
 				
 			}
 		});
 		
-	
-		
+		btnInvisible.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				filtrar();
+				
+			}
+		});
 	}
 	
 	public void filtrar() {
 		modelo.setRowCount(0);
-		String[] params = {inputDni.getText(), inputNombre.getText(), inputApellido1.getText(), inputApellido2.getText()};
-		List<Alumno> lista = alumnoController.findAll(params);
+		Alumno filtro = new Alumno();
+		filtro.setDni(inputDni.getText());
+		filtro.setNombre(inputNombre.getText());
+		filtro.setApellido1(inputApellido1.getText());
+		filtro.setApellido2(inputApellido2.getText());
+		List<Alumno> lista = alumnoController.findAll(filtro);
 		for(Alumno alumno : lista) {
 			modelo.addRow(new Object[] {
 					alumno.getDni(), alumno.getNombre(), alumno.getApellido1(), alumno.getApellido2()
@@ -282,7 +294,16 @@ public class AlumnoView extends JPanel {
 		String nombre = modelo.getValueAt(r, 1).toString();
 		String apellido1 = modelo.getValueAt(r, 2).toString();
 		String apellido2 = modelo.getValueAt(r, 3).toString();
-		new AlumnoDetalle(getParent(), "Editar alumno", dni, nombre, apellido1, apellido2);
+		new AlumnoDetalle(getParent(), dni, nombre, apellido1, apellido2);
 			
+	}
+	
+	public void limpiar() {
+		inputDni.setText("");
+		inputNombre.setText("");
+		inputApellido1.setText("");
+		inputApellido2.setText("");
+		modelo.setRowCount(0);
+		
 	}
 }

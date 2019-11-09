@@ -2,37 +2,37 @@ package Controller;
 
 import java.util.List;
 
-import dao.AlumnoDao;
-import dao.AlumnoDaoImp;
-import model.Alumno;
+import dao.LibroDao;
+import dao.LibroDaoImp;
+import model.Libro;
 
 public class LibroController {
 
-	private AlumnoDao alumnoDao;
+	private LibroDao libroDao;
 	
 	public LibroController() {
-		alumnoDao = new AlumnoDaoImp();
+		libroDao = new LibroDaoImp();
 	}
 	
-	public Alumno find(String dni) {
-		return alumnoDao.find(dni);
+	public Libro find(String isbn) {
+		return libroDao.find(isbn);
 		
 	};
 	
-	public List<Alumno> findAll(String[] params) {
-		return alumnoDao.findAll(params);
+	public List<Libro> findAll(Libro filtro) {
+		return libroDao.findAll(filtro);
 	}
 	
 	public void add(String[] valores) {
-		alumnoDao.add(valores);
+		libroDao.add(valores);
 	}
 	
-	public void update(String[] valores, String dni) {
-		alumnoDao.update(valores, dni);
+	public void update(String[] valores, String isbn) {
+		libroDao.update(valores, isbn);
 	}
 	
-	public void delete(String dni) {
-		alumnoDao.delete(dni);
+	public void delete(String isbn) {
+		libroDao.delete(isbn);
 	}
 	
 	
