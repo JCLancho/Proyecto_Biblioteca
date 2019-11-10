@@ -2,6 +2,8 @@ package Controller;
 
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import dao.EstadoDao;
 import dao.EstadoDaoImp;
 import model.Estado;
@@ -31,7 +33,7 @@ public class EstadoController {
 		estadoDao.update(valores, cod_estado);
 	}
 	
-	public void delete(String cod_estado) {
+	public void delete(String cod_estado) throws MySQLIntegrityConstraintViolationException {
 		estadoDao.delete(cod_estado);
 	}
 	

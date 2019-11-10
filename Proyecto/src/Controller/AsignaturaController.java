@@ -2,6 +2,8 @@ package Controller;
 
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import dao.AsignaturaDao;
 import dao.AsignaturaDaoImp;
 import model.Asignatura;
@@ -31,7 +33,7 @@ public class AsignaturaController {
 		asignaturaDao.update(valores, cod_asignatura);
 	}
 	
-	public void delete(String cod_asignatura) {
+	public void delete(String cod_asignatura) throws MySQLIntegrityConstraintViolationException {
 		asignaturaDao.delete(cod_asignatura);
 	}
 	

@@ -2,6 +2,8 @@ package Controller;
 
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import dao.LibroDao;
 import dao.LibroDaoImp;
 import model.Libro;
@@ -16,7 +18,6 @@ public class LibroController {
 	
 	public Libro find(String isbn) {
 		return libroDao.find(isbn);
-		
 	};
 	
 	public List<Libro> findAll(Libro filtro) {
@@ -31,7 +32,7 @@ public class LibroController {
 		libroDao.update(valores, isbn);
 	}
 	
-	public void delete(String isbn) {
+	public void delete(String isbn) throws MySQLIntegrityConstraintViolationException {
 		libroDao.delete(isbn);
 	}
 	

@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import Controller.ConnectionController;
 import model.Alumno;
 
@@ -30,6 +32,7 @@ public class AlumnoDaoImp implements AlumnoDao{
 					alumno.setApellido1(rs.getString("APELLIDO1"));
 					alumno.setApellido2(rs.getString("APELLIDO2"));
 				}
+				cc.cerrar();
 				rs.close();
 				return alumno;
 			} catch (SQLException e) {
@@ -81,10 +84,17 @@ public class AlumnoDaoImp implements AlumnoDao{
 	}
 
 	@Override
-	public void delete(String dni) {
+	public void delete(String dni) throws MySQLIntegrityConstraintViolationException {
 		cc = new ConnectionController();
 		cc.delete(AlumnoDaoSql.DELETE_WHERE, new String[] {dni});
 		cc.cerrar();
+	}
+	
+	@Override
+	public void procedureInsertar(String[] valores) {
+		cc = new ConnectionController();
+		cc.procedimiento(AlumnoDaoSql.PROCEDIMIENTO, valores);
+		
 	}
 	
 	private String[] appendWhere(Alumno filtro) {
@@ -112,8 +122,6 @@ public class AlumnoDaoImp implements AlumnoDao{
 		this.query = q.toString();
 		return listaParametros.toArray(new String[0]);
 	}
-	
-	
 
 
 

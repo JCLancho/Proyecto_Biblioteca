@@ -50,14 +50,7 @@ public class Alumno {
 	
 	@Override
 	public String toString() {
-		StringBuffer result = new StringBuffer();
-		result.append(this.getClass().getName()).append("Object {");
-		result.append(" [DNI: ").append(this.getDni()).append("]");
-		result.append(" [Nombre: ").append(this.getNombre()).append("]");
-		result.append(" [Apellido 1: ").append(this.getApellido1()).append("]");
-		result.append(" [Apellido 2: ").append(this.getApellido2()).append("]");
-		result.append(" }");
-		return result.toString();
+		return this.dni;
 	}
 	
 	

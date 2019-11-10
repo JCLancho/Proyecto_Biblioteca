@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import Controller.AsignaturaController;
 import Controller.ConnectionController;
 import Controller.EstadoController;
@@ -16,6 +18,7 @@ public class LibroDaoImp implements LibroDao{
 	
 	private ConnectionController cc;
 	private String query;
+	
 	private AsignaturaController asignaturaController;
 	private EstadoController estadoController;
 	
@@ -37,12 +40,13 @@ public class LibroDaoImp implements LibroDao{
 					libro.setAutor(rs.getString("AUTOR"));
 					libro.setEditorial(rs.getString("EDITORIAL"));
 					
-					Asignatura asignatura = asignaturaController.find(rs.getLong("COD_ASIGNATURA"));
+					Asignatura asignatura = asignaturaController.find(rs.getLong("ASIGNATURA"));
 					libro.setAsignatura(asignatura);
 					
-					Estado estado = estadoController.find(rs.getString("COD_ESTADO"));
+					Estado estado = estadoController.find(rs.getString("ESTADO"));
 					libro.setEstado(estado);
 				}
+				cc.cerrar();
 				rs.close();
 				return libro;
 			} catch (SQLException e) {
@@ -100,7 +104,7 @@ public class LibroDaoImp implements LibroDao{
 	}
 
 	@Override
-	public void delete(String isbn) {
+	public void delete(String isbn) throws MySQLIntegrityConstraintViolationException {
 		cc = new ConnectionController();
 		cc.delete(LibroDaoSql.DELETE_WHERE, new String[] {isbn});
 		cc.cerrar();

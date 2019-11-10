@@ -2,6 +2,8 @@ package dao;
 
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import model.Estado;
 
 public interface EstadoDao {
@@ -14,7 +16,7 @@ public interface EstadoDao {
 	
 	void update(String[] valores, String cod_estado);
 	
-	void delete(String cod_estado);
+	void delete(String cod_estado) throws MySQLIntegrityConstraintViolationException;
 		
 	
 }

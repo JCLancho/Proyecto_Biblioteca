@@ -26,13 +26,10 @@ import java.awt.GridLayout;
 
 public class Main extends JFrame {
 
-	private JPanel contentPane;
-	private AlumnoView alumno;
-	private LibroView libro;
-	private PrestamoView prestamo;
-	private JPanel panelNorte, panelCentral, panelBotones, panelFeedback;
-	private JToggleButton btnAlumno, btnLibro, btnPrestamos;
-	private JToggleButton btnDevoluciones;
+	private JPanel contentPane, panelNorte, panelCentral, panelBotones;
+	private JToggleButton btnAlumno, btnLibro, btnPrestamos, btnDevoluciones;
+	
+	public static JPanel panelFeedback;
 
 	/**
 	 * Launch the application.
@@ -60,7 +57,7 @@ public class Main extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(800, 700);
 		dibujar();
-		eventos();		
+		eventos();
 		
 	}
 	
@@ -103,15 +100,11 @@ public class Main extends JFrame {
 		grupo.add(btnDevoluciones);
 		
 		panelFeedback = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panelFeedback.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
 		panelNorte.add(panelFeedback);
+		panelFeedback.setLayout(new BoxLayout(panelFeedback, BoxLayout.X_AXIS));
 		
 		panelCentral = new JPanel();
 		panelCentral.setLayout(new BorderLayout(0, 0));
-		alumno = new AlumnoView();
-		libro = new LibroView();
-		prestamo = new PrestamoView();
 		
 		contentPane.add(panelCentral, BorderLayout.CENTER);
 	}
@@ -124,10 +117,10 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				reset();
-				panelCentral.add(alumno, BorderLayout.CENTER);
-				alumno.setVisible(true);
-				libro.setVisible(false);
-				prestamo.setVisible(false);
+				panelCentral.add(new AlumnoView(), BorderLayout.CENTER);
+				repaint();
+				revalidate();
+
 				
 			}
 		});
@@ -138,12 +131,10 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				reset();
-				panelCentral.add(libro, BorderLayout.CENTER);
-				libro.setVisible(true);
-				alumno.setVisible(false);
-				prestamo.setVisible(false);
-				
-				
+				panelCentral.add(new LibroView(), BorderLayout.CENTER);
+				repaint();
+				revalidate();
+
 			}
 		});
 		
@@ -152,13 +143,11 @@ public class Main extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				
 				reset();
-				panelCentral.add(prestamo, BorderLayout.CENTER);
-				prestamo.setVisible(true);
-				libro.setVisible(false);
-				alumno.setVisible(false);
-				
+				panelCentral.add(new PrestamoView(), BorderLayout.CENTER);
+				repaint();
+				revalidate();
+
 			}
 		});
 		
@@ -166,7 +155,11 @@ public class Main extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+
+				reset();
+				panelCentral.add(new DevolucionView(), BorderLayout.CENTER);
+				repaint();
+				revalidate();
 				
 			}
 		});
@@ -176,9 +169,7 @@ public class Main extends JFrame {
 		for(Component c : panelCentral.getComponents()) {
 			panelCentral.remove(c);
 		}
-		alumno.limpiar();
-		libro.limpiar();
-		prestamo.limpiar();
+
 	}
 
 }

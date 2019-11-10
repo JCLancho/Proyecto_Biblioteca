@@ -23,6 +23,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.feedback.FeedBack;
+import com.feedback.FeedBackConstants;
+
 import Controller.AlumnoController;
 
 public class AlumnoDetalle extends JDialog {
@@ -188,14 +191,24 @@ public class AlumnoDetalle extends JDialog {
 				String apellido2 = inputApellido2.getText();
 				if(inputDni.isEditable()) {//añadiendo
 					if(dni.equals("")) {
-						JOptionPane.showMessageDialog(getContentPane(), "El DNI no puede estar vacio");
+						AlumnoView.mensaje = "El DNI no puede estar vacio";
+						AlumnoView.tipoMensaje = FeedBackConstants.ERROR;
+						AlumnoView.btnInvisible.doClick();
 					}else {
-						alumnoController.add(new String[] {dni, nombre, apellido1, apellido2});
+						String[] valores = {dni, nombre, apellido1, apellido2};
+						//para usar la estructura java
+//						alumnoController.add(valores);
+						//para usar el procedimiento almacenado
+						alumnoController.procedureInsertar(valores);
+						AlumnoView.mensaje = "Alumno insertado correctamente";
+						AlumnoView.tipoMensaje = FeedBackConstants.CORRECTO;
 						AlumnoView.btnInvisible.doClick();
 						dispose();
 					}
 				}else {
 					alumnoController.update(new String[] {nombre, apellido1, apellido2}, dni);
+					AlumnoView.mensaje = "Alumno actualizado correctamente";
+					AlumnoView.tipoMensaje = FeedBackConstants.CORRECTO;
 					AlumnoView.btnInvisible.doClick();
 					dispose();
 				}

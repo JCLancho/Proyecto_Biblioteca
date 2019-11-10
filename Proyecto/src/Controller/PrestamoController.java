@@ -1,38 +1,41 @@
 package Controller;
 
+import java.sql.Date;
 import java.util.List;
 
-import dao.AlumnoDao;
-import dao.AlumnoDaoImp;
-import model.Alumno;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
+import dao.PrestamoDao;
+import dao.PrestamoDaoImp;
+import model.Prestamo;
 
 public class PrestamoController {
 
-	private AlumnoDao alumnoDao;
+	private PrestamoDao prestamoDao;
 	
 	public PrestamoController() {
-		alumnoDao = new AlumnoDaoImp();
+		prestamoDao = new PrestamoDaoImp();
 	}
 	
-	public Alumno find(String dni) {
-		return alumnoDao.find(dni);
+	public Prestamo find(String[] keys) {
+		return prestamoDao.find(keys);
 		
 	};
 	
-//	public List<Alumno> findAll(String[] params) {
-//		return alumnoDao.findAll(params);
-//	}
+	public List<Prestamo> findAll(Prestamo filtro) {
+		return prestamoDao.findAll(filtro);
+	}
 	
 	public void add(String[] valores) {
-		alumnoDao.add(valores);
+		prestamoDao.add(valores);
 	}
 	
-	public void update(String[] valores, String dni) {
-		alumnoDao.update(valores, dni);
+	public void update(String[] valores, String[] keys) {
+		prestamoDao.update(valores, keys);
 	}
 	
-	public void delete(String dni) {
-		alumnoDao.delete(dni);
+	public void delete(String[] keys) throws MySQLIntegrityConstraintViolationException {
+		prestamoDao.delete(keys);
 	}
 	
 	

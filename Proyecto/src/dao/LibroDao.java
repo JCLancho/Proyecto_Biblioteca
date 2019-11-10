@@ -2,6 +2,8 @@ package dao;
 
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import model.Libro;
 
 public interface LibroDao {
@@ -14,7 +16,7 @@ public interface LibroDao {
 	
 	void update(String[] valores, String isbn);
 	
-	void delete(String isbn);
+	void delete(String isbn) throws MySQLIntegrityConstraintViolationException;
 		
 	
 }

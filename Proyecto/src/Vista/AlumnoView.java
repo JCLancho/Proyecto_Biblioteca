@@ -9,11 +9,16 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import java.awt.Insets;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import com.feedback.FeedBack;
+import com.feedback.FeedBackConstants;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 import java.util.List;
 
@@ -22,12 +27,13 @@ import model.Alumno;
 
 import javax.swing.JButton;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
-import javax.swing.SwingConstants;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
@@ -43,15 +49,17 @@ public class AlumnoView extends JPanel {
 	private AlumnoController alumnoController;
 
 	public static JButton btnInvisible;
+	public static int tipoMensaje;
+	public static String mensaje;
 
 
 	public AlumnoView() {
 		alumnoController = new AlumnoController();
-		setVisible(false);
+		tipoMensaje = -1;
+		mensaje = "";
 		dibujar();
 		eventos();
-		
-				
+		setVisible(true);
 	}
 	
 	private void dibujar() {
@@ -204,6 +212,16 @@ public class AlumnoView extends JPanel {
 			}
 		});
 		
+		btnLimpiar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				limpiar();
+				
+			}
+		});
+		
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -237,7 +255,11 @@ public class AlumnoView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				String dni = modelo.getValueAt(table.getSelectedRow(), 0).toString();
-				alumnoController.delete(dni);
+				try {
+					alumnoController.delete(dni);
+				} catch (MySQLIntegrityConstraintViolationException e) {
+					JOptionPane.showMessageDialog(getParent(), "No se puede borrar un alumno con libros prestados");
+				}
 				filtrar();
 				
 			}
@@ -249,6 +271,7 @@ public class AlumnoView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				editar();
+				filtrar();
 			}
 		});
 		
@@ -258,6 +281,7 @@ public class AlumnoView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				new AlumnoDetalle(getParent());
+				filtrar();
 				
 			}
 		});
@@ -267,13 +291,13 @@ public class AlumnoView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				filtrar();
+				mostrar(tipoMensaje, mensaje);
 				
 			}
 		});
 	}
 	
-	public void filtrar() {
+	private void filtrar() {
 		modelo.setRowCount(0);
 		Alumno filtro = new Alumno();
 		filtro.setDni(inputDni.getText());
@@ -305,5 +329,11 @@ public class AlumnoView extends JPanel {
 		inputApellido2.setText("");
 		modelo.setRowCount(0);
 		
+	}
+	
+	private void mostrar(int tipo, String mensaje) {
+		FeedBack fb = new FeedBack(Main.panelFeedback, tipo, mensaje);
+		revalidate();
+		fb.execute();
 	}
 }

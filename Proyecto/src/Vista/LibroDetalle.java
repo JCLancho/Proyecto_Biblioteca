@@ -50,22 +50,22 @@ public class LibroDetalle extends JDialog {
 	
 	
 	public LibroDetalle(Container c) {
+		OPERACION = "add";
 		inicializar(c);
 		dibujar();
 		eventos();
 		setTitle("Añadir libro");
 		setVisible(true);
-		OPERACION = "add";
 	}
 	
 	public LibroDetalle(Container c, String isbn, String titulo, String autor, String editorial, Asignatura asignatura, Estado estado) {
+		OPERACION = "edit";
 		inicializar(c);
 		dibujar();
 		eventos();
 		rellenarCampos(isbn, titulo, autor, editorial, asignatura, estado);
 		setTitle("Editar libro");
 		setVisible(true);
-		OPERACION = "edit";
 				
 	}
 	
@@ -227,8 +227,8 @@ public class LibroDetalle extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				if(comboAsignatura.getSelectedIndex() != -1 && comboEstado.getSelectedIndex() != -1) {
 					String isbn = inputISBN.getText();
-					String autor = inputAutor.getText();
 					String titulo = inputTitulo.getText();
+					String autor = inputAutor.getText();
 					String editorial = inputEditorial.getText();
 					Asignatura asignatura = (Asignatura) comboAsignatura.getSelectedItem();
 					Estado estado = (Estado) comboEstado.getSelectedItem();
@@ -236,12 +236,12 @@ public class LibroDetalle extends JDialog {
 						if(isbn.equals("")) {
 							JOptionPane.showMessageDialog(getContentPane(), "El ISBN no puede estar vacio");
 						}else {
-							libroController.add(new String[] {isbn, autor, titulo, editorial, asignatura.getCodAsignatura()+"", estado.getCodigo()});
+							libroController.add(new String[] {isbn, titulo, autor, editorial, asignatura.getCodAsignatura()+"", estado.getCodigo()});
 							LibroView.btnFiltrar.doClick();
 							dispose();
 						}
 					}else {
-						libroController.update(new String[] {autor, titulo, editorial, asignatura.getCodAsignatura()+"", estado.getCodigo()}, isbn);
+						libroController.update(new String[] {titulo, autor, editorial, asignatura.getCodAsignatura()+"", estado.getCodigo()}, isbn);
 						LibroView.btnFiltrar.doClick();
 						dispose();
 					}

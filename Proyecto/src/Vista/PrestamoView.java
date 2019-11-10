@@ -1,306 +1,398 @@
 package Vista;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 
 import java.awt.Insets;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
-import java.util.List;
 
 import Controller.AlumnoController;
+import Controller.LibroController;
+import Controller.PrestamoController;
 import model.Alumno;
+import model.Libro;
+import model.Prestamo;
 
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import javax.swing.SwingConstants;
-import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.awt.event.ActionEvent;
-import javax.swing.ListSelectionModel;
-import java.awt.Dimension;
+import javax.swing.JComboBox;
+import javax.swing.border.TitledBorder;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class PrestamoView extends JPanel {
 
-	private JTextField inputDni;
-	private JTextField inputNombre;
-	private JTextField inputApellido1;
-	private JTextField inputApellido2;
-	private JTable table;
-	private JPanel panel_1;
-	private JPanel panel_2;
-	private JButton btnAnadir;
-	private JButton btnBuscar;
-	private JButton btnEditar;
-	private JButton btnBorrar;
-	private JPanel panel_3;
-	private DefaultTableModel modelo;
+	private JTextField inputDni, inputIsbn;
+	private JLabel lblResultado, lblMotivo;
+	private JPanel panel_1, panel_2, panel_3, panel_4, panel_5, panel_6, panel_7, panel_8, panel_9, panel_10, panel_11;
+	private JButton btnComprobar, btnPrestar;
+	private JComboBox<Alumno> comboDni;
+	private JComboBox<Libro> comboIsbn;
+	private DefaultComboBoxModel<Alumno> modeloAlumno;
+	private DefaultComboBoxModel<Libro> modeloLibro;
+	
 	private AlumnoController alumnoController;
-	private JPanel panel_4;
-	private JScrollPane scrollPane_1;
+	private LibroController libroController;
+	private PrestamoController prestamoController;
 
 
-	/**
-	 * Create the frame.
-	 */
 	public PrestamoView() {
 		alumnoController = new AlumnoController();
-		setVisible(false);
-		
+		libroController = new LibroController();
+		prestamoController = new PrestamoController();
+		dibujar();
+		eventos();
+		setVisible(true);	
+	}
+	
+	private void dibujar() {
 		this.setLayout(new GridLayout(0, 1, 0, 0));
-		
 		panel_1 = new JPanel();
 		this.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
-		
 		JPanel panel = new JPanel();
 		panel_1.add(panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] {30, 180, 30, 180};
-		gbl_panel.rowHeights = new int[] {5, 20, 5, 20, 5, 20, 5, 20, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+		gbl_panel.columnWidths = new int[] {180, 180, 120};
+		gbl_panel.rowHeights = new int[] {20, 5, 50};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0};
 		panel.setLayout(gbl_panel);
 		
-		JLabel lblDni = new JLabel("PRESTAMO");
+		JLabel lblDni = new JLabel("DNI");
 		GridBagConstraints gbc_lblDni = new GridBagConstraints();
 		gbc_lblDni.anchor = GridBagConstraints.WEST;
 		gbc_lblDni.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDni.gridx = 1;
-		gbc_lblDni.gridy = 1;
+		gbc_lblDni.gridx = 0;
+		gbc_lblDni.gridy = 0;
 		panel.add(lblDni, gbc_lblDni);
 		
+		panel_5 = new JPanel();
+		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
+		gbc_panel_5.fill = GridBagConstraints.BOTH;
+		gbc_panel_5.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_5.gridx = 0;
+		gbc_panel_5.gridy = 1;
+		panel.add(panel_5, gbc_panel_5);
+		panel_5.setLayout(new GridLayout(2, 1, 0, 0));
+		
 		inputDni = new JTextField();
-		GridBagConstraints gbc_inputDni = new GridBagConstraints();
-		gbc_inputDni.fill = GridBagConstraints.BOTH;
-		gbc_inputDni.insets = new Insets(0, 0, 5, 5);
-		gbc_inputDni.gridx = 1;
-		gbc_inputDni.gridy = 2;
-		panel.add(inputDni, gbc_inputDni);
+		panel_5.add(inputDni);
+		inputDni.setToolTipText("12345678A");
 		inputDni.setColumns(10);
 		
-		JLabel lblNombre = new JLabel("Nombre");
-		GridBagConstraints gbc_lblNombre = new GridBagConstraints();
-		gbc_lblNombre.anchor = GridBagConstraints.WEST;
-		gbc_lblNombre.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNombre.gridx = 3;
-		gbc_lblNombre.gridy = 1;
-		panel.add(lblNombre, gbc_lblNombre);
+		panel_6 = new JPanel();
+		FlowLayout flowLayout_2 = (FlowLayout) panel_6.getLayout();
+		flowLayout_2.setVgap(0);
+		flowLayout_2.setHgap(0);
+		flowLayout_2.setAlignment(FlowLayout.LEFT);
+		panel_5.add(panel_6);
 		
-		inputNombre = new JTextField();
-		GridBagConstraints gbc_inputNombre = new GridBagConstraints();
-		gbc_inputNombre.insets = new Insets(0, 0, 5, 0);
-		gbc_inputNombre.fill = GridBagConstraints.HORIZONTAL;
-		gbc_inputNombre.gridx = 3;
-		gbc_inputNombre.gridy = 2;
-		panel.add(inputNombre, gbc_inputNombre);
-		inputNombre.setColumns(20);
+		comboDni = new JComboBox<Alumno>();
+		panel_6.add(comboDni);
 		
-		JLabel lblApellido1 = new JLabel("Apellido 1");
-		GridBagConstraints gbc_lblApellido1 = new GridBagConstraints();
-		gbc_lblApellido1.anchor = GridBagConstraints.WEST;
-		gbc_lblApellido1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblApellido1.gridx = 1;
-		gbc_lblApellido1.gridy = 3;
-		panel.add(lblApellido1, gbc_lblApellido1);
+		JLabel lblIsbn = new JLabel("ISBN");
+		GridBagConstraints gbc_lblIsbn = new GridBagConstraints();
+		gbc_lblIsbn.anchor = GridBagConstraints.WEST;
+		gbc_lblIsbn.insets = new Insets(0, 0, 5, 0);
+		gbc_lblIsbn.gridx = 1;
+		gbc_lblIsbn.gridy = 0;
+		panel.add(lblIsbn, gbc_lblIsbn);
 		
-		JLabel lblApellido2 = new JLabel("Apellido 2");
-		GridBagConstraints gbc_lblApellido2 = new GridBagConstraints();
-		gbc_lblApellido2.anchor = GridBagConstraints.WEST;
-		gbc_lblApellido2.insets = new Insets(0, 0, 5, 0);
-		gbc_lblApellido2.gridx = 3;
-		gbc_lblApellido2.gridy = 3;
-		panel.add(lblApellido2, gbc_lblApellido2);
+		panel_7 = new JPanel();
+		GridBagConstraints gbc_panel_7 = new GridBagConstraints();
+		gbc_panel_7.fill = GridBagConstraints.BOTH;
+		gbc_panel_7.gridx = 1;
+		gbc_panel_7.gridy = 1;
+		panel.add(panel_7, gbc_panel_7);
+		panel_7.setLayout(new GridLayout(2, 1, 0, 0));
 		
-		inputApellido1 = new JTextField();
-		GridBagConstraints gbc_inputApellido1 = new GridBagConstraints();
-		gbc_inputApellido1.fill = GridBagConstraints.BOTH;
-		gbc_inputApellido1.insets = new Insets(0, 0, 5, 5);
-		gbc_inputApellido1.gridx = 1;
-		gbc_inputApellido1.gridy = 4;
-		panel.add(inputApellido1, gbc_inputApellido1);
-		inputApellido1.setColumns(10);
+		inputIsbn = new JTextField();
+		inputIsbn.setToolTipText("13 digitos");
+		panel_7.add(inputIsbn);
+		inputIsbn.setColumns(30);
 		
-		inputApellido2 = new JTextField();
-		GridBagConstraints gbc_inputApellido2 = new GridBagConstraints();
-		gbc_inputApellido2.insets = new Insets(0, 0, 5, 0);
-		gbc_inputApellido2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_inputApellido2.gridx = 3;
-		gbc_inputApellido2.gridy = 4;
-		panel.add(inputApellido2, gbc_inputApellido2);
-		inputApellido2.setColumns(10);
+		panel_8 = new JPanel();
+		panel_7.add(panel_8);
+		panel_8.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		
+		comboIsbn = new JComboBox<Libro>();
+		panel_8.add(comboIsbn);
 		
 		panel_2 = new JPanel();
 		panel_1.add(panel_2, BorderLayout.SOUTH);
-		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
+		panel_2.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
-		btnBuscar = new JButton("Buscar");
-		btnBuscar.setHorizontalTextPosition(SwingConstants.LEFT);
-		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
-		panel_2.add(btnBuscar);
+		btnComprobar = new JButton("Comprobar");
+		btnComprobar.setEnabled(false);
+		panel_2.add(btnComprobar);
+		
+		panel_10 = new JPanel();
+		add(panel_10);
+		panel_10.setLayout(new BorderLayout(0, 0));
 		
 		panel_3 = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panel_3.getLayout();
-		flowLayout.setAlignment(FlowLayout.RIGHT);
-		panel_2.add(panel_3);
-		
-		btnAnadir = new JButton("Añadir");
-		btnAnadir.setPreferredSize(new Dimension(80, 25));
-
-		panel_3.add(btnAnadir);
-		btnAnadir.setHorizontalTextPosition(SwingConstants.LEADING);
-		btnAnadir.setHorizontalAlignment(SwingConstants.LEFT);
-		
-		btnEditar = new JButton("Editar");
-		btnEditar.setPreferredSize(new Dimension(80, 25));
-		btnEditar.setEnabled(false);
-		panel_3.add(btnEditar);
-		
-		btnBorrar = new JButton("Borrar");
-		btnBorrar.setPreferredSize(new Dimension(80, 25));
-		btnBorrar.setEnabled(false);
-		panel_3.add(btnBorrar);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		this.add(scrollPane);
-		
-		table = new JTable();
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		modelo = new DefaultTableModel() {
-			@Override
-		    public boolean isCellEditable(int row, int column) {
-		       return false;
-		    }
-		};
-		modelo.setColumnIdentifiers(new String[] {
-				"DNI", "Nombre", "Apellido 1", "Apellido 2"
-			});
-
-		table.setModel(modelo);
-		scrollPane.setViewportView(table);
+		panel_10.add(panel_3);
+		panel_3.setBorder(new TitledBorder(null, "Resultado", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_3.setLayout(new GridLayout(0, 2, 0, 0));
 		
 		panel_4 = new JPanel();
-		add(panel_4);
+		panel_3.add(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
 		
-		scrollPane_1 = new JScrollPane();
-		add(scrollPane_1);
+		lblResultado = new JLabel("");
+		lblResultado.setHorizontalAlignment(SwingConstants.CENTER);
+		lblResultado.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		panel_4.add(lblResultado);
 		
+		panel_9 = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panel_9.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
+		panel_9.setBorder(new TitledBorder(null, "Motivos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_3.add(panel_9);
 		
-		btnBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				filtrar();
+		lblMotivo = new JLabel("");
+		panel_9.add(lblMotivo);
+		
+		panel_11 = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panel_11.getLayout();
+		flowLayout.setAlignment(FlowLayout.RIGHT);
+		panel_10.add(panel_11, BorderLayout.SOUTH);
+		
+		btnPrestar = new JButton("Prestar");
+		btnPrestar.setEnabled(false);
+		panel_11.add(btnPrestar);
+		
+		llenarComboAlumno();
+		llenarComboLibro();
+	}
+	
+	private void eventos() {
+		
+		inputDni.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+
+				filtrarComboAlumno();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+
+				filtrarComboAlumno();
+				
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+
+				filtrarComboAlumno();
+				
 			}
 		});
 		
-		table.addMouseListener(new MouseAdapter() {
+		inputIsbn.getDocument().addDocumentListener(new DocumentListener() {
+			
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void removeUpdate(DocumentEvent e) {
+
+				filtrarComboLibro();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+
+				filtrarComboLibro();
 				
-				if(arg0.getClickCount() == 2) {
-					editar();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+
+				filtrarComboLibro();
+				
+			}
+		});
+		
+		
+		btnComprobar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Alumno alumno = (Alumno) comboDni.getSelectedItem();
+				Libro libro = (Libro) comboIsbn.getSelectedItem();
+				if(alumno != null && libro != null) {
+					Prestamo filtro = new Prestamo();
+					filtro.setLibro(libro);
+					List<Prestamo> librosPrestados = prestamoController.findAll(filtro);
+					if(librosPrestados.size() > 0) {
+						lblResultado.setText("ERROR");
+						lblMotivo.setText("El libro seleccionado ya está prestado");
+						btnPrestar.setEnabled(false);
+					}else {
+						btnPrestar.setEnabled(true);
+						lblResultado.setText("CORRECTO");
+						lblMotivo.setText("");
+					}
+				}else {
+					JOptionPane.showMessageDialog(getParent(), "Selecciona un alumno y un libro");
 				}
 				
 			}
 		});
 		
-		
-		ListSelectionModel listSelectionModel = table.getSelectionModel();
-		listSelectionModel.addListSelectionListener(new ListSelectionListener() {
-
-		    public void valueChanged(ListSelectionEvent e) {
-		    	
-		    	if(listSelectionModel.isSelectionEmpty()) {
-		    		btnEditar.setEnabled(false);
-					btnBorrar.setEnabled(false);
-		        } else {
-		        	btnEditar.setEnabled(true);
-					btnBorrar.setEnabled(true);		            
-		        }
-		    }
-		});
-		
-		btnBorrar.addActionListener(new ActionListener() {
+		btnPrestar.addActionListener(new ActionListener( ) {
 			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				String dni = modelo.getValueAt(table.getSelectedRow(), 0).toString();
-				alumnoController.delete(dni);
-				filtrar();
-				
+			public void actionPerformed(ActionEvent e) {
+				Alumno alumno = (Alumno) comboDni.getSelectedItem();
+				Libro libro = (Libro) comboIsbn.getSelectedItem();
+				String[] valores = {alumno.getDni(), libro.getIsbn(), libro.getEstado().getCodigo()};
+				prestamoController.add(valores);
+				Date sqlDate = new Date(new java.util.Date().getTime());
+				sqlDate.toString();
+				Prestamo prestamo = prestamoController.find(new String[] {alumno.getDni(), libro.getIsbn(), sqlDate.toString()});
+				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+				String info = "<html><ul>Prestamo realizado:</ul>"
+						+ "<li> Alumno: " + prestamo.getAlumno().getNombreCompleto() + "</li>"
+						+ "<li> Libro: " + prestamo.getLibro().getTitulo() + "</li>"
+						+ "<li> Fecha devolucion: " + formato.format(prestamo.getFechaDevolucion()) + "</li></html>";
+				lblResultado.setText(info);
+				lblMotivo.setText("");
 			}
 		});
-		
-		btnEditar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				editar();
-			}
-		});
-		
-		btnAnadir.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-//				new AlumnoDetalle(getParent(), "Añadir alumno");
-				filtrar();
-				
-			}
-		});
-		
 	
+		comboDni.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Alumno alumno = (Alumno) comboDni.getSelectedItem();
+				Libro libro = (Libro) comboIsbn.getSelectedItem();
+				if(alumno != null && libro != null)
+					btnComprobar.setEnabled(true);
+				else
+					btnComprobar.setEnabled(false);
+				
+			}
+		});
 		
+		comboIsbn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Alumno alumno = (Alumno) comboDni.getSelectedItem();
+				Libro libro = (Libro) comboIsbn.getSelectedItem();
+				if(alumno != null && libro != null)
+					btnComprobar.setEnabled(true);
+				else
+					btnComprobar.setEnabled(false);
+				
+			}
+		});
+		
+		comboDni.addFocusListener(new FocusAdapter() {
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				
+				filtrarComboAlumno();
+				btnPrestar.setEnabled(false);
+				lblMotivo.setText("");
+				lblResultado.setText("");
+				
+			}
+		});
+		
+		comboIsbn.addFocusListener(new FocusAdapter() {
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				Alumno alumno = (Alumno) comboDni.getSelectedItem();
+				Libro libro = (Libro) comboIsbn.getSelectedItem();
+				if(alumno != null && libro != null)
+					btnComprobar.setEnabled(true);
+				else
+					btnComprobar.setEnabled(false);
+				filtrarComboLibro();
+				btnPrestar.setEnabled(false);
+				lblMotivo.setText("");
+				lblResultado.setText("");
+				
+			}
+		});
+		
+
 	}
 	
-	public void filtrar() {
-//		modelo.setRowCount(0);
-//		String[] params = {inputDni.getText(), inputNombre.getText(), inputApellido1.getText(), inputApellido2.getText()};
-//		List<Alumno> lista = alumnoController.findAll(params);
-//		for(Alumno alumno : lista) {
-//			modelo.addRow(new Object[] {
-//					alumno.getDni(), alumno.getNombre(), alumno.getApellido1(), alumno.getApellido2()
-//			});
-//		}
-	}
 
-	private void editar() {
-		int r = table.getSelectedRow();
-		String dni = modelo.getValueAt(r, 0).toString();
-		String nombre = modelo.getValueAt(r, 1).toString();
-		String apellido1 = modelo.getValueAt(r, 2).toString();
-		String apellido2 = modelo.getValueAt(r, 3).toString();
-//		new AlumnoDetalle(getParent(), "Editar alumno", dni, nombre, apellido1, apellido2);
-			
-	}
 	
 	public void limpiar() {
 		inputDni.setText("");
-		inputNombre.setText("");
-		inputApellido1.setText("");
-		inputApellido2.setText("");
-		modelo.setRowCount(0);
+		inputIsbn.setText("");
+		comboDni.setSelectedIndex(-1);
+		comboIsbn.setSelectedIndex(-1);
 		
+	}
+	
+	
+	private void llenarComboAlumno() {
+		Alumno filtro = new Alumno();
+		Alumno[] alumnos = alumnoController.findAll(filtro).toArray(new Alumno[0]);
+		modeloAlumno = new DefaultComboBoxModel<Alumno>(alumnos);
+		comboDni.setModel(modeloAlumno);
+		comboDni.setSelectedIndex(-1);
+	}
+	
+	private void filtrarComboAlumno() {
+		Alumno filtro = new Alumno();
+		filtro.setDni(inputDni.getText());
+		Alumno[] alumnos = alumnoController.findAll(filtro).toArray(new Alumno[0]);
+		modeloAlumno = new DefaultComboBoxModel<Alumno>(alumnos);
+		comboDni.setModel(modeloAlumno);
+		comboDni.showPopup();
+		comboDni.setSelectedIndex(-1);
+		btnPrestar.setEnabled(false);
+		lblMotivo.setText("");
+		lblResultado.setText("");
+	}
+	
+	private void llenarComboLibro() {
+		Libro filtro = new Libro();
+		Libro[] libros = libroController.findAll(filtro).toArray(new Libro[0]);
+		modeloLibro = new DefaultComboBoxModel<Libro>(libros);
+		comboIsbn.setModel(modeloLibro);
+		comboIsbn.setSelectedIndex(-1);
+	}
+	
+	private void filtrarComboLibro() {
+		Libro filtro = new Libro();
+		filtro.setIsbn(inputIsbn.getText());
+		Libro[] libros = libroController.findAll(filtro).toArray(new Libro[0]);
+		modeloLibro = new DefaultComboBoxModel<Libro>(libros);
+		comboIsbn.setModel(modeloLibro);
+		comboIsbn.showPopup();
+		comboIsbn.setSelectedIndex(-1);
+		btnPrestar.setEnabled(false);
+		lblMotivo.setText("");
+		lblResultado.setText("");
 	}
 }

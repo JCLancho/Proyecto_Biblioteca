@@ -10,7 +10,7 @@ public class Libro {
 	private Estado estado;
 	
 	public Libro() {
-		
+
 	}
 	
 	public String getIsbn() {
@@ -52,16 +52,7 @@ public class Libro {
 	
 	@Override
 	public String toString() {
-		StringBuffer result = new StringBuffer();
-		result.append(this.getClass().getName()).append("Object {");
-		result.append(" [ISBN: ").append(this.getIsbn()).append("]");
-		result.append(" [Titulo: ").append(this.getTitulo()).append("]");
-		result.append(" [Autor: ").append(this.getAutor()).append("]");
-		result.append(" [Editorial: ").append(this.getEditorial()).append("]");
-		result.append(" [Asignatura: ").append(this.getAsignatura()).append("]");
-		result.append(" [Estado: ").append(this.getEstado()).append("]");
-		result.append("}");
-		return result.toString();
+		return this.isbn;
 	}
 	
 }

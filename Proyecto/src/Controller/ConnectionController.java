@@ -4,17 +4,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.sql.PreparedStatement;
+import java.sql.CallableStatement;
+
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
+
 
 
 public class ConnectionController {
 
 	private Connection con;
 	private PreparedStatement ps;
+	private CallableStatement cs;
 	
 	public ConnectionController() {
-		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			this.con = DriverManager.getConnection("jdbc:mysql://localhost/PROYECTO","dm2", "dm2");
@@ -83,13 +87,27 @@ public class ConnectionController {
 		}
 	}
 	
-	public void delete(String query, String[] keys) {
+	public void delete(String query, String[] keys) throws MySQLIntegrityConstraintViolationException {
 		try {
 			this.ps = this.con.prepareStatement(query);
 			for(int i = 0; i < keys.length; i++) {
 				this.ps.setString(i+1, keys[i]);
 			}
 			this.ps.executeUpdate();
+		}catch (MySQLIntegrityConstraintViolationException c) {
+			throw c;
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void procedimiento(String query, String[] valores) {
+		try {
+			this.cs = this.con.prepareCall(query);
+			for(int i = 0; i < valores.length; i++) {
+				this.cs.setString(i+1, valores[i]);
+			}
+			this.cs.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}

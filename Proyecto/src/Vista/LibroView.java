@@ -9,11 +9,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import java.awt.Insets;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 import java.util.List;
 
@@ -43,7 +46,7 @@ import java.awt.Component;
 
 public class LibroView extends JPanel {
 
-	private JTextField inputISBN, inputTitulo, inputAutor, inputEditorial;
+	private JTextField inputIsbn, inputTitulo, inputAutor, inputEditorial;
 	private JTable table;
 	private JPanel panel_1, panel_2, panel_3, panel_4, panel_5;
 	private JButton btnAnadir, btnBuscar, btnEditar, btnBorrar, btnLimpiar, btnAgregarAsignatura;
@@ -68,9 +71,9 @@ public class LibroView extends JPanel {
 		libroController = new LibroController();
 		asignaturaController = new AsignaturaController();
 		estadoController = new EstadoController();
-		setVisible(false);
 		dibujar();
 		eventos();
+		setVisible(true);
 		
 	}
 	
@@ -98,16 +101,16 @@ public class LibroView extends JPanel {
 		gbc_lblISBN.gridy = 0;
 		panel.add(lblISBN, gbc_lblISBN);
 		
-		inputISBN = new JTextField();
-		inputISBN.setToolTipText("13 digitos");
+		inputIsbn = new JTextField();
+		inputIsbn.setToolTipText("13 digitos");
 		GridBagConstraints gbc_inputISBN = new GridBagConstraints();
 		gbc_inputISBN.anchor = GridBagConstraints.WEST;
 		gbc_inputISBN.fill = GridBagConstraints.VERTICAL;
 		gbc_inputISBN.insets = new Insets(0, 0, 5, 5);
 		gbc_inputISBN.gridx = 0;
 		gbc_inputISBN.gridy = 1;
-		panel.add(inputISBN, gbc_inputISBN);
-		inputISBN.setColumns(15);
+		panel.add(inputIsbn, gbc_inputISBN);
+		inputIsbn.setColumns(15);
 		
 		JLabel lblTitulo = new JLabel("Titulo");
 		GridBagConstraints gbc_lblTitulo = new GridBagConstraints();
@@ -307,7 +310,11 @@ public class LibroView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				String dni = modelo.getValueAt(table.getSelectedRow(), 0).toString();
-				libroController.delete(dni);
+				try {
+					libroController.delete(dni);
+				} catch (MySQLIntegrityConstraintViolationException e) {
+					JOptionPane.showMessageDialog(getParent(), "No se puede borrar un libro prestado");
+				}
 				filtrar();
 				
 			}
@@ -339,7 +346,6 @@ public class LibroView extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				limpiar();
-				
 			}
 		});
 		
@@ -375,10 +381,10 @@ public class LibroView extends JPanel {
 		
 	}
 	
-	public void filtrar() {
+	private void filtrar() {
 		modelo.setRowCount(0);
 		Libro filtro = new Libro();
-		filtro.setIsbn(inputISBN.getText());
+		filtro.setIsbn(inputIsbn.getText());
 		filtro.setTitulo(inputTitulo.getText());
 		filtro.setAutor(inputAutor.getText());
 		filtro.setEditorial(inputEditorial.getText());
@@ -425,7 +431,7 @@ public class LibroView extends JPanel {
 	}
 	
 	public void limpiar() {
-		inputISBN.setText("");
+		inputIsbn.setText("");
 		inputTitulo.setText("");
 		inputAutor.setText("");
 		inputEditorial.setText("");

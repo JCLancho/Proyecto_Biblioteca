@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import Controller.ConnectionController;
 import model.Asignatura;
 
@@ -30,6 +32,7 @@ public class AsignaturaDaoImp implements AsignaturaDao{
 					asignatura.setAbreviatura(rs.getString("ABREVIATURA"));
 				}
 				rs.close();
+				cc.cerrar();
 				return asignatura;
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -79,7 +82,7 @@ public class AsignaturaDaoImp implements AsignaturaDao{
 	}
 
 	@Override
-	public void delete(String cod_asignatura) {
+	public void delete(String cod_asignatura) throws MySQLIntegrityConstraintViolationException {
 		cc = new ConnectionController();
 		cc.delete(AsignaturaDaoSql.DELETE_WHERE, new String[] {cod_asignatura});
 		cc.cerrar();

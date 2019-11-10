@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import Controller.ConnectionController;
 import model.Estado;
 
@@ -28,6 +30,7 @@ public class EstadoDaoImp implements EstadoDao{
 					estado.setCodigo(rs.getString("COD_ESTADO"));
 					estado.setDescripcion(rs.getString("DESCRIPCION"));
 				}
+				cc.cerrar();
 				rs.close();
 				return estado;
 			} catch (SQLException e) {
@@ -77,7 +80,7 @@ public class EstadoDaoImp implements EstadoDao{
 	}
 
 	@Override
-	public void delete(String cod_estado) {
+	public void delete(String cod_estado) throws MySQLIntegrityConstraintViolationException {
 		cc = new ConnectionController();
 		cc.delete(EstadoDaoSql.DELETE_WHERE, new String[] {cod_estado});
 		cc.cerrar();

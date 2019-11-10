@@ -2,6 +2,8 @@ package Controller;
 
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import dao.AlumnoDao;
 import dao.AlumnoDaoImp;
 import model.Alumno;
@@ -31,8 +33,12 @@ public class AlumnoController {
 		alumnoDao.update(valores, dni);
 	}
 	
-	public void delete(String dni) {
+	public void delete(String dni) throws MySQLIntegrityConstraintViolationException {
 		alumnoDao.delete(dni);
+	}
+	
+	public void procedureInsertar(String[] valores) {
+		alumnoDao.procedureInsertar(valores);
 	}
 	
 	
