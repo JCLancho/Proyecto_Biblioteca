@@ -25,6 +25,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.feedback.FeedBackConstants;
+
 import Controller.LibroController;
 import Controller.AsignaturaController;
 import Controller.EstadoController;
@@ -234,19 +236,27 @@ public class LibroDetalle extends JDialog {
 					Estado estado = (Estado) comboEstado.getSelectedItem();
 					if(OPERACION.equals("add")) {
 						if(isbn.equals("")) {
-							JOptionPane.showMessageDialog(getContentPane(), "El ISBN no puede estar vacio");
+							LibroView.mensaje = "El ISBN no puede estar vacio";
+							LibroView.tipoMensaje = FeedBackConstants.INFO;
+							LibroView.btnInvisible.doClick();
 						}else {
 							libroController.add(new String[] {isbn, titulo, autor, editorial, asignatura.getCodAsignatura()+"", estado.getCodigo()});
-							LibroView.btnFiltrar.doClick();
+							LibroView.mensaje = "Libro insertado correctamente";
+							LibroView.tipoMensaje = FeedBackConstants.CORRECTO;
+							LibroView.btnInvisible.doClick();
 							dispose();
 						}
 					}else {
 						libroController.update(new String[] {titulo, autor, editorial, asignatura.getCodAsignatura()+"", estado.getCodigo()}, isbn);
-						LibroView.btnFiltrar.doClick();
+						LibroView.mensaje = "Libro actualizado correctamente";
+						LibroView.tipoMensaje = FeedBackConstants.CORRECTO;
+						LibroView.btnInvisible.doClick();
 						dispose();
 					}
 				}else {
-					JOptionPane.showMessageDialog(getContentPane(), "Campos obligatorios: 'Estado', 'Asignatura'");
+					LibroView.mensaje = "Campos obligatorio: 'Estado', 'Asignatura'";
+					LibroView.tipoMensaje = FeedBackConstants.INFO;
+					LibroView.btnInvisible.doClick();
 				}
 				
 			}

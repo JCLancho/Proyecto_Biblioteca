@@ -16,6 +16,8 @@ import java.awt.Insets;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.feedback.FeedBack;
+import com.feedback.FeedBackConstants;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 import java.util.List;
@@ -61,13 +63,14 @@ public class LibroView extends JPanel {
 	private EstadoController estadoController;
 	private LibroController libroController;
 	
-	public static JButton btnFiltrar, btnCargarAsignaturas;
+	public static JButton btnInvisible, btnCargarAsignaturas;
+	public static int tipoMensaje;
+	public static String mensaje;
 
 
-	/**
-	 * Create the frame.
-	 */
 	public LibroView() {
+		tipoMensaje = -1;
+		mensaje = "";
 		libroController = new LibroController();
 		asignaturaController = new AsignaturaController();
 		estadoController = new EstadoController();
@@ -218,9 +221,9 @@ public class LibroView extends JPanel {
 		btnLimpiar.setPreferredSize(new Dimension(85, 25));
 		panel_4.add(btnLimpiar);
 		
-		btnFiltrar = new JButton();
-		btnFiltrar.setVisible(false);
-		panel_4.add(btnFiltrar);
+		btnInvisible = new JButton();
+		btnInvisible.setVisible(false);
+		panel_4.add(btnInvisible);
 		
 		btnCargarAsignaturas = new JButton();
 		btnCargarAsignaturas.setVisible(false);
@@ -312,8 +315,9 @@ public class LibroView extends JPanel {
 				String dni = modelo.getValueAt(table.getSelectedRow(), 0).toString();
 				try {
 					libroController.delete(dni);
+					mostrar(FeedBackConstants.CORRECTO, "Libro borrado");
 				} catch (MySQLIntegrityConstraintViolationException e) {
-					JOptionPane.showMessageDialog(getParent(), "No se puede borrar un libro prestado");
+					mostrar(FeedBackConstants.ERROR, "No se puede borrar un libro prestado");
 				}
 				filtrar();
 				
@@ -326,7 +330,7 @@ public class LibroView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				editar();
-				
+				filtrar();
 			}
 		});
 		
@@ -336,6 +340,7 @@ public class LibroView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				new LibroDetalle(getParent());
+				filtrar();
 				
 			}
 		});
@@ -355,16 +360,15 @@ public class LibroView extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				new AsignaturaDetalle(getParent());
-				
 			}
 		});
 		
-		btnFiltrar.addActionListener(new ActionListener() {
+		btnInvisible.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				filtrar();				
+				mostrar(tipoMensaje, mensaje);			
 			}
 		});
 		
@@ -453,5 +457,11 @@ public class LibroView extends JPanel {
 		modeloEstados = new DefaultComboBoxModel<Estado>(estados);
 		comboEstado.setModel(modeloEstados);
 		comboEstado.setSelectedIndex(-1);
+	}
+	
+	private void mostrar(int tipo, String mensaje) {
+		FeedBack fb = new FeedBack(Main.panelFeedback, tipo, mensaje);
+		revalidate();
+		fb.execute();
 	}
 }

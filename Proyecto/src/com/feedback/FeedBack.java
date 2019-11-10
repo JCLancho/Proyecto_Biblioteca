@@ -27,11 +27,20 @@ public class FeedBack extends SwingWorker<Void, Void>{
 		panel = new JPanel(new FlowLayout());
 		FlowLayout fl = (FlowLayout) panel.getLayout();
 		fl.setAlignment(FlowLayout.LEFT);
-		if(tipo == 1) {
-			panel.setBackground(new Color(132, 255, 128));
-		}else {
+		switch (tipo) {
+		case 0:
 			panel.setBackground(new Color(255, 61, 61));
+			break;
+		case 1:
+			panel.setBackground(new Color(132, 255, 128));
+			break;
+		case 2:
+			panel.setBackground(new Color(255, 193, 79));
+			break;
+		default:
+			break;
 		}
+
 		label = new JLabel(mensaje);
 		panel.add(label);
 		panelPrincipal = panelFeeback;

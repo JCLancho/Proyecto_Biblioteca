@@ -18,6 +18,9 @@ import java.awt.Insets;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.feedback.FeedBack;
+import com.feedback.FeedBackConstants;
+
 import Controller.AlumnoController;
 import Controller.HistoricoController;
 import Controller.PrestamoController;
@@ -54,10 +57,16 @@ public class DevolucionView extends JPanel {
 	
 	private PrestamoController prestamoController;
 	private AlumnoController alumnoController;
+	
+	public static JButton btnInvisible;
+	public static int tipoMensaje;
+	public static String mensaje;
 
 	public DevolucionView() {
 		prestamoController = new PrestamoController();
 		alumnoController = new AlumnoController();
+		tipoMensaje = -1;
+		mensaje = "";
 		dibujar();
 		eventos();
 		setVisible(true);	
@@ -125,6 +134,10 @@ public class DevolucionView extends JPanel {
 		btnLimpiar = new JButton("Limpiar");
 		btnLimpiar.setPreferredSize(new Dimension(85, 25));
 		panel_4.add(btnLimpiar);
+		
+		btnInvisible = new JButton();
+		btnInvisible.setVisible(false);
+		panel_4.add(btnInvisible);
 		
 		panel_3 = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_3.getLayout();
@@ -259,6 +272,16 @@ public class DevolucionView extends JPanel {
 				
 			}
 		});
+		
+		btnInvisible.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				mostrar(tipoMensaje, mensaje);
+				
+			}
+		});
 	}
 	
 	public void filtrar() {
@@ -268,14 +291,16 @@ public class DevolucionView extends JPanel {
 			Prestamo filtro = new Prestamo();
 			filtro.setAlumno(alumno);
 			List<Prestamo> lista = prestamoController.findAll(filtro);
-			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-			for(Prestamo prestamo : lista) {
-				modelo.addRow(new Object[] {
-						prestamo, formato.format(prestamo.getFechaPrestamo()), formato.format(prestamo.getFechaDevolucion()), prestamo.getEstado()
-				});
+			if(lista.size() > 0) {
+				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+				for(Prestamo prestamo : lista) {
+					modelo.addRow(new Object[] {
+							prestamo, formato.format(prestamo.getFechaPrestamo()), formato.format(prestamo.getFechaDevolucion())
+					});
+				}
 			}
 		}else {
-			JOptionPane.showMessageDialog(getParent(), "Selecciona un alumno");
+			mostrar(FeedBackConstants.INFO, "Selecciona un alumno");
 		}
 	}
 
@@ -286,6 +311,7 @@ public class DevolucionView extends JPanel {
 		prestamoController.update(new String[] {}, keys);
 		filtrar();
 		table.setRowSelectionInterval(r, r);
+		mostrar(FeedBackConstants.CORRECTO, "Libro renovado, 15 dias extras");
 			
 	}
 	
@@ -320,5 +346,11 @@ public class DevolucionView extends JPanel {
 		comboDni.setModel(modeloAlumno);
 		comboDni.showPopup();
 		comboDni.setSelectedIndex(-1);
+	}
+	
+	private void mostrar(int tipo, String mensaje) {
+		FeedBack fb = new FeedBack(Main.panelFeedback, tipo, mensaje);
+		revalidate();
+		fb.execute();
 	}
 }

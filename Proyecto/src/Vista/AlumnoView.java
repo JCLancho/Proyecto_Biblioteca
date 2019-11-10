@@ -38,6 +38,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
 
+/**
+ * La vista del alumno
+ * @author Lancho
+ *
+ */
 public class AlumnoView extends JPanel {
 
 	private JTextField inputDni, inputNombre, inputApellido1, inputApellido2;
@@ -52,7 +57,9 @@ public class AlumnoView extends JPanel {
 	public static int tipoMensaje;
 	public static String mensaje;
 
-
+	/**
+	 * Constructor
+	 */
 	public AlumnoView() {
 		alumnoController = new AlumnoController();
 		tipoMensaje = -1;
@@ -62,6 +69,9 @@ public class AlumnoView extends JPanel {
 		setVisible(true);
 	}
 	
+	/**
+	 * metodo encargado de pintar el panel
+	 */
 	private void dibujar() {
 		this.setLayout(new GridLayout(0, 1, 0, 0));
 		panel_1 = new JPanel();
@@ -205,6 +215,9 @@ public class AlumnoView extends JPanel {
 		scrollPane.setViewportView(table);
 	}
 	
+	/**
+	 * metodo que gestiona los eventos
+	 */
 	private void eventos() {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -257,8 +270,9 @@ public class AlumnoView extends JPanel {
 				String dni = modelo.getValueAt(table.getSelectedRow(), 0).toString();
 				try {
 					alumnoController.delete(dni);
+					mostrar(FeedBackConstants.CORRECTO, "Alumno borrado");
 				} catch (MySQLIntegrityConstraintViolationException e) {
-					JOptionPane.showMessageDialog(getParent(), "No se puede borrar un alumno con libros prestados");
+					mostrar(FeedBackConstants.ERROR, "No se puede borrar un alumno con libros prestados");
 				}
 				filtrar();
 				
@@ -297,6 +311,9 @@ public class AlumnoView extends JPanel {
 		});
 	}
 	
+	/**
+	 * se encarga de filtrar por los patrones de busqued y de actualizar la tabla
+	 */
 	private void filtrar() {
 		modelo.setRowCount(0);
 		Alumno filtro = new Alumno();

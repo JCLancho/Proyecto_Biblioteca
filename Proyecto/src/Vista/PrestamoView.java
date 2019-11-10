@@ -4,6 +4,9 @@ import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.feedback.FeedBack;
+import com.feedback.FeedBackConstants;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
@@ -254,7 +257,7 @@ public class PrestamoView extends JPanel {
 						lblMotivo.setText("");
 					}
 				}else {
-					JOptionPane.showMessageDialog(getParent(), "Selecciona un alumno y un libro");
+					mostrar(FeedBackConstants.INFO, "Selecciona un alumno y un libro");
 				}
 				
 			}
@@ -278,6 +281,8 @@ public class PrestamoView extends JPanel {
 						+ "<li> Fecha devolucion: " + formato.format(prestamo.getFechaDevolucion()) + "</li></html>";
 				lblResultado.setText(info);
 				lblMotivo.setText("");
+				btnPrestar.setEnabled(false);
+				mostrar(FeedBackConstants.CORRECTO, "Prestamo realizado correctamente");
 			}
 		});
 	
@@ -394,5 +399,11 @@ public class PrestamoView extends JPanel {
 		btnPrestar.setEnabled(false);
 		lblMotivo.setText("");
 		lblResultado.setText("");
+	}
+	
+	private void mostrar(int tipo, String mensaje) {
+		FeedBack fb = new FeedBack(Main.panelFeedback, tipo, mensaje);
+		revalidate();
+		fb.execute();
 	}
 }

@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.feedback.FeedBackConstants;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 import Controller.EstadoController;
@@ -169,13 +170,21 @@ public class DevolverDetalle extends JDialog {
 					try {
 						prestamoController.delete(keys);
 						historicoController.add(valores);
+						DevolucionView.mensaje = "Libro devuelto";
+						DevolucionView.tipoMensaje = FeedBackConstants.CORRECTO;
+						DevolucionView.btnInvisible.doClick();
+						dispose();
 					} catch (MySQLIntegrityConstraintViolationException e) {
-						JOptionPane.showMessageDialog(getParent(), "No se puede borrar este prestamo");
+						DevolucionView.mensaje = "No se puede borrar ese prestamo";
+						DevolucionView.tipoMensaje = FeedBackConstants.ERROR;
+						DevolucionView.btnInvisible.doClick();
 					}
 				}else {
-					JOptionPane.showMessageDialog(getParent(), "Selecciona un estado");
+					DevolucionView.mensaje = "Selecciona un estado";
+					DevolucionView.tipoMensaje = FeedBackConstants.INFO;
+					DevolucionView.btnInvisible.doClick();
 				}
-				dispose();
+				
 			}
 		});
 	

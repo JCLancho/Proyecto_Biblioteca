@@ -28,6 +28,12 @@ import com.feedback.FeedBackConstants;
 
 import Controller.AlumnoController;
 
+/**
+ * Clase alumno detalle
+ * encargada de añadir y editar alumnos
+ * @author Lancho
+ *
+ */
 public class AlumnoDetalle extends JDialog {
 
 	private JPanel contentPane, panel_1, panel_2, panel_3;
@@ -37,7 +43,11 @@ public class AlumnoDetalle extends JDialog {
 	private AlumnoController alumnoController;
 
 	
-	
+	/**
+	 * constructor para añadir
+	 * parametro el contenedor del padre, para referenciar la posicion de los objetos
+	 * @param c
+	 */
 	public AlumnoDetalle(Container c) {
 		alumnoController = new AlumnoController();
 		dibujar();
@@ -47,10 +57,19 @@ public class AlumnoDetalle extends JDialog {
 		setSize(450, 300);
 		setModal(true);
 		setLocationRelativeTo(c);
-		setVisible(true);		
+		setVisible(true);
 		
 	}
 	
+	/**
+	 * constructor para editar
+	 * hay que pasarle todos los campos que se rellenan automaticamente
+	 * @param c
+	 * @param dni
+	 * @param nombre
+	 * @param apellido1
+	 * @param apellido2
+	 */
 	public AlumnoDetalle(Container c, String dni, String nombre, String apellido1, String apellido2) {
 		alumnoController = new AlumnoController();
 		dibujar();
@@ -65,6 +84,9 @@ public class AlumnoDetalle extends JDialog {
 				
 	}
 	
+	/**
+	 * metodo dibujar, pinta la venta
+	 */
 	private void dibujar() {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -170,7 +192,11 @@ public class AlumnoDetalle extends JDialog {
 		panel_3.add(btnCancelar);
 	}
 	
+	/**
+	 * metodo eventos, gestiona todo lo relacionado con eventos
+	 */
 	private void eventos() {
+		
 		btnCancelar.addActionListener(new ActionListener() {
 			
 			@Override
@@ -192,13 +218,13 @@ public class AlumnoDetalle extends JDialog {
 				if(inputDni.isEditable()) {//aÃ±adiendo
 					if(dni.equals("")) {
 						AlumnoView.mensaje = "El DNI no puede estar vacio";
-						AlumnoView.tipoMensaje = FeedBackConstants.ERROR;
+						AlumnoView.tipoMensaje = FeedBackConstants.INFO;
 						AlumnoView.btnInvisible.doClick();
 					}else {
 						String[] valores = {dni, nombre, apellido1, apellido2};
-						//para usar la estructura java
+//						para usar la estructura java
 //						alumnoController.add(valores);
-						//para usar el procedimiento almacenado
+//						para usar el procedimiento almacenado
 						alumnoController.procedureInsertar(valores);
 						AlumnoView.mensaje = "Alumno insertado correctamente";
 						AlumnoView.tipoMensaje = FeedBackConstants.CORRECTO;
@@ -218,7 +244,13 @@ public class AlumnoDetalle extends JDialog {
 	
 	}
 	
-	
+	/**
+	 * coloca toda la informacion en su sitio, informacion obtenida del constructor
+	 * @param dni
+	 * @param nombre
+	 * @param apellido1
+	 * @param apellido2
+	 */
 	private void rellenarCampos(String dni, String nombre, String apellido1, String apellido2) {
 		inputDni.setText(dni);
 		inputDni.setEditable(false);

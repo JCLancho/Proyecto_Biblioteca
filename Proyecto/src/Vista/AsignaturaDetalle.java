@@ -23,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.feedback.FeedBackConstants;
+
 import Controller.AlumnoController;
 import Controller.AsignaturaController;
 
@@ -135,12 +137,18 @@ public class AsignaturaDetalle extends JDialog {
 				String nombre = inputAsignatura.getText();
 				String abrev = inputAbreviatura.getText();
 				if(nombre.equals("") || abrev.equals("")) {
-					JOptionPane.showMessageDialog(getContentPane(), "Rellena todos los campos");
+					LibroView.mensaje = "Rellena todos los campos";
+					LibroView.tipoMensaje = FeedBackConstants.INFO;
+					LibroView.btnInvisible.doClick();
 				}else {
 					asignaturaController.add(new String[] {nombre, abrev});
+					LibroView.mensaje = "Asignatura insertada correctamente";
+					LibroView.tipoMensaje = FeedBackConstants.CORRECTO;
+					LibroView.btnInvisible.doClick();
+					dispose();
 				}
 				LibroView.btnCargarAsignaturas.doClick();
-				dispose();
+
 				
 			}
 		});

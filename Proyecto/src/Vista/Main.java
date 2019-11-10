@@ -24,6 +24,11 @@ import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import java.awt.GridLayout;
 
+/**
+ * Clase principal, gestiona todo el programa
+ * @author Lancho
+ *
+ */
 public class Main extends JFrame {
 
 	private JPanel contentPane, panelNorte, panelCentral, panelBotones;
@@ -32,7 +37,7 @@ public class Main extends JFrame {
 	public static JPanel panelFeedback;
 
 	/**
-	 * Launch the application.
+	 * Lanza la aplicacion.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -49,7 +54,7 @@ public class Main extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Constructor
 	 */
 	public Main() {
 		setResizable(false);
@@ -61,6 +66,9 @@ public class Main extends JFrame {
 		
 	}
 	
+	/**
+	 * Metodo para pintar la ventana
+	 */
 	private void dibujar() {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -109,6 +117,9 @@ public class Main extends JFrame {
 		contentPane.add(panelCentral, BorderLayout.CENTER);
 	}
 	
+	/**
+	 * Metodo que gestiona los eventos
+	 */
 	private void eventos() {
 		
 		btnAlumno.addActionListener(new ActionListener() {
@@ -165,6 +176,9 @@ public class Main extends JFrame {
 		});
 	}
 	
+	/**
+	 * Al cambiar de pestaña vacio el contenedor principal
+	 */
 	private void reset() {
 		for(Component c : panelCentral.getComponents()) {
 			panelCentral.remove(c);
