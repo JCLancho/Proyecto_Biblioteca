@@ -10,6 +10,12 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import Controller.ConnectionController;
 import model.Alumno;
 
+/**
+ * Clase de acceso a datos que implementa los metodos predefinidos
+ * ligeras diferencias con sus clases hermanas en funcion la tabla que se ataque
+ * @author Lancho
+ *
+ */
 public class AlumnoDaoImp implements AlumnoDao{
 	
 	private ConnectionController cc;

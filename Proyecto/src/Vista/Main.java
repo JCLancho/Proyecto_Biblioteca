@@ -3,12 +3,9 @@ package Vista;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
-
-import com.redim.RedimImage;
 
 import javax.swing.ButtonGroup;
 import java.awt.event.ActionEvent;
@@ -17,10 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
-import javax.swing.ImageIcon;
-import javax.swing.Icon;
 import java.awt.Dimension;
-import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import java.awt.GridLayout;
 

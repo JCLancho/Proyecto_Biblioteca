@@ -1,5 +1,10 @@
 package com.feedback;
 
+/**
+ * Almacena las constantes para saber que tipo de mensaje mostrar
+ * @author jclan
+ *
+ */
 public abstract class FeedBackConstants {
 	
 	public static final int ERROR  = 0;

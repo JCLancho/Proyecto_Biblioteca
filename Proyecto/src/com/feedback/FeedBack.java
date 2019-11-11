@@ -4,14 +4,14 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 
 /**
- * @author dm2
+ * Clase que genera un hilo secundario para los mensajes de información, error y confirmacion con el usuario
+ * @author Lancho
  *
  */
 public class FeedBack extends SwingWorker<Void, Void>{

@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * Crear objetos Alumno
+ * @author Lancho
+ *
+ */
 public class Alumno {
 
 	private String dni;

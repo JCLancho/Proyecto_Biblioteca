@@ -9,15 +9,21 @@ import java.sql.CallableStatement;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
-
-
-
+/**
+ * Clase generica que ataca directamente la base de datos
+ * implementa los metodos genericos para que sirvan para todos los DAO
+ * @author Lancho
+ *
+ */
 public class ConnectionController {
 
 	private Connection con;
 	private PreparedStatement ps;
 	private CallableStatement cs;
 	
+	/**
+	 * Crea la conexion
+	 */
 	public ConnectionController() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");

@@ -8,6 +8,12 @@ import dao.AlumnoDao;
 import dao.AlumnoDaoImp;
 import model.Alumno;
 
+/**
+ * Controlador de Alumno
+ * Capa intermedia entre la vida y el acceso a datos
+ * @author jclan
+ *
+ */
 public class AlumnoController {
 
 	private AlumnoDao alumnoDao;

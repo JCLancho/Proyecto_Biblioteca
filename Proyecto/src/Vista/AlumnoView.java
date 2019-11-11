@@ -9,7 +9,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import java.awt.Insets;
@@ -27,13 +26,11 @@ import model.Alumno;
 
 import javax.swing.JButton;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;

@@ -2,8 +2,6 @@ package Controller;
 
 import java.util.List;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-
 import dao.HistoricoDao;
 import dao.HistoricoDaoImp;
 import model.Historico;

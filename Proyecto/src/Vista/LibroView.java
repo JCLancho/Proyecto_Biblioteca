@@ -9,7 +9,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import java.awt.Insets;
@@ -34,7 +33,6 @@ import javax.swing.JComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import javax.swing.SwingConstants;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 
@@ -44,7 +42,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
-import java.awt.Component;
 
 public class LibroView extends JPanel {
 

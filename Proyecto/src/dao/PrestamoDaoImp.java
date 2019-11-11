@@ -9,7 +9,6 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 
 import Controller.AlumnoController;
 import Controller.ConnectionController;
-import Controller.EstadoController;
 import Controller.LibroController;
 import model.Alumno;
 import model.Libro;
@@ -22,12 +21,10 @@ public class PrestamoDaoImp implements PrestamoDao{
 	
 	private AlumnoController alumnoController;
 	private LibroController libroController;
-	private EstadoController estadoController;
 	
 	public PrestamoDaoImp() {
 		alumnoController = new AlumnoController();
 		libroController = new LibroController();
-		estadoController = new EstadoController();
 	}
 
 	@Override

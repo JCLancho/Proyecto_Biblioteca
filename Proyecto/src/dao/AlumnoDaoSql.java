@@ -1,5 +1,10 @@
 package dao;
 
+/**
+ * Clase abstracta, contiene las 'query' de la tabla alumno
+ * @author jclan
+ *
+ */
 public abstract class AlumnoDaoSql {
 
 	public static final String TABLA = "ALUMNO";

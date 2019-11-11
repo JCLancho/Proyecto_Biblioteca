@@ -11,7 +11,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import java.awt.Insets;
@@ -22,7 +21,6 @@ import com.feedback.FeedBack;
 import com.feedback.FeedBackConstants;
 
 import Controller.AlumnoController;
-import Controller.HistoricoController;
 import Controller.PrestamoController;
 import model.Alumno;
 import model.Prestamo;
