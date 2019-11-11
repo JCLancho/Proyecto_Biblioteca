@@ -2,7 +2,7 @@ package com.feedback;
 
 /**
  * Almacena las constantes para saber que tipo de mensaje mostrar
- * @author jclan
+ * @author Lancho
  *
  */
 public abstract class FeedBackConstants {
